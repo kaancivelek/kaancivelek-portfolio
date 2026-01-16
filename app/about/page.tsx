@@ -1,28 +1,36 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import PageOverlay from "@/components/page-overlay/PageOverlay";
+import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
+import { useData } from "@/contexts/DataContext";
 
 export default function AboutPage() {
-  const router = useRouter();
+  const { about, aboutBioHtml } = useData();
+
+  if (!about) {
+    return (
+      <PageOverlayWrapper title="About">
+        <div style={{ color: "#fff" }}>Loading...</div>
+      </PageOverlayWrapper>
+    );
+  }
 
   return (
-    <PageOverlay
-      title="About"
-      onClose={() => router.push("/")}
-    >
+    <PageOverlayWrapper title="About">
       <div style={{ color: "#fff", lineHeight: 1.8 }}>
-        <p style={{ marginBottom: 16 }}>
-          Ben Kaan Civelek. Full-stack developer olarak çalışıyorum.
-        </p>
-        <p style={{ marginBottom: 16 }}>
-          React, Next.js, TypeScript ve modern web teknolojileri ile projeler geliştiriyorum.
-        </p>
-        <p>
-          Bu portföy sitesi yıldız navigasyonu ve modal overlay sistemi ile tasarlanmıştır.
-        </p>
+        <div style={{ marginBottom: 32 }}>
+          <h2 style={{ fontSize: "1.5rem", marginBottom: 16, fontWeight: 400 }}>
+            {about.name}
+          </h2>
+          <p style={{ color: "#999", marginBottom: 24 }}>{about.title}</p>
+
+          <div
+            style={{ marginBottom: 0 }}
+            className="markdown-content"
+            dangerouslySetInnerHTML={{ __html: aboutBioHtml }}
+          />
+        </div>
       </div>
-    </PageOverlay>
+    </PageOverlayWrapper>
   );
 }
 

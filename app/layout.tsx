@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Aldrich } from "next/font/google";
 import "./globals.css";
 import StarNavigation from "@/components/star-navigation/StarNavigation";
+import { ClientLayout } from "@/components/ClientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const aldrich = Aldrich({
+  variable: "--font-aldrich",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -26,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${aldrich.variable} antialiased`}
         style={{ minHeight: "100vh", background: "#111" }}
       >
-        <StarNavigation />
-        {children}
+        <ClientLayout>
+          <StarNavigation />
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );

@@ -1,19 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import PageOverlay from "@/components/page-overlay/PageOverlay";
+import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
+import { ProjectCard } from "@/components/ProjectCard";
+import { useData } from "@/contexts/DataContext";
 
 export default function ProjectsPage() {
-  const router = useRouter();
+  const { projects } = useData();
+
+  if (!projects || projects.length === 0) {
+    return (
+      <PageOverlayWrapper title="Projects">
+        <div style={{ color: "#fff" }}>Loading...</div>
+      </PageOverlayWrapper>
+    );
+  }
 
   return (
-    <PageOverlay
-      title="Projects"
-      onClose={() => router.push("/")}
-    >
-      <div style={{ color: "#fff", lineHeight: 1.8 }}>
-        <p>Projelerim burada listelenecek.</p>
+    <PageOverlayWrapper title="Projects">
+      <div style={{ color: "#fff" }}>
+        {projects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
+        ))}
       </div>
-    </PageOverlay>
+    </PageOverlayWrapper>
   );
 }

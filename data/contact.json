@@ -1,0 +1,27 @@
+{
+  "contact": {
+    "email": "businesskaancivelek@gmail.com",
+    "availability": "Open to internships and freelance collaborations",
+    "timezone": "Europe/Istanbul (GMT+3)",
+    "preferredContact": "email",
+    "responseTime": "Typically replies within 24–48 hours"
+  },
+  "socialLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/kaancivelek",
+      "username": "@kaancivelek"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/kaan-civelek",
+      "username": "Kaan Civelek"
+    },
+    {
+      "platform": "Twitter",
+      "url": "https://twitter.com/kaancivelek17",
+      "username": "@kaancivelek"
+    }
+  ],
+  "callToAction": "contact-cta.md"
+}

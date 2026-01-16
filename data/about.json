@@ -1,0 +1,16 @@
+{
+  "name": "Kaan Civelek",
+  "title": "Software Engineering Student & Full-Stack Developer",
+  "bio": "about-bio.md",
+  "location": "Based in Turkey",
+  "email": "businesskaancivelek@gmail.com",
+  "social": {
+    "github": "https://github.com/kaancivelek",
+    "linkedin": "https://linkedin.com/in/kaancivelek",
+    "twitter": "https://twitter.com/kaancivelek"
+  },
+  "skills": {
+    "primary": ["React", "Next.js", "TypeScript", "Node.js"],
+    "secondary": ["ASP.NET Core", "SQL", "Framer Motion", "Tailwind CSS", "Git", "REST APIs"]
+  }
+}

@@ -1,20 +1,67 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import PageOverlay from "@/components/page-overlay/PageOverlay";
+import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
+import { SocialLinkCard } from "@/components/SocialLinkCard";
+import { useData } from "@/contexts/DataContext";
 
 export default function ContactPage() {
-  const router = useRouter();
+  const { contact, contactCtaHtml } = useData();
+
+  if (!contact) {
+    return (
+      <PageOverlayWrapper title="Contact">
+        <div style={{ color: "#fff" }}>Loading...</div>
+      </PageOverlayWrapper>
+    );
+  }
 
   return (
-    <PageOverlay
-      title="Contact"
-      onClose={() => router.push("/")}
-    >
-      <div style={{ color: "#fff", lineHeight: 1.8 }}>
-        <p>Telefon: 0591 231 28 73</p>
-        <p>Email: kaan@example.com</p>
+    <PageOverlayWrapper title="Contact">
+      <div style={{ color: "#fff" }}>
+        <div
+          className="markdown-content"
+          style={{ marginBottom: 32 }}
+          dangerouslySetInnerHTML={{ __html: contactCtaHtml }}
+        />
+
+        <div
+          style={{
+            padding: 24,
+            background: "rgba(255, 255, 255, 0.05)",
+            borderRadius: 12,
+            marginBottom: 32,
+          }}
+        >
+          <h3 style={{ fontSize: "1.25rem", marginBottom: 16, fontWeight: 400 }}>
+            Contact Details
+          </h3>
+          <div style={{ lineHeight: 1.8, color: "#ccc" }}>
+            <p>
+              📧 <strong>Email:</strong> {contact.contact.email}
+            </p>
+            <p>
+              ⏰ <strong>Timezone:</strong> {contact.contact.timezone}
+            </p>
+            <p>
+              ⚡ <strong>Response Time:</strong> {contact.contact.responseTime}
+            </p>
+            <p style={{ marginTop: 12, color: "#4ade80" }}>
+              ✨ {contact.contact.availability}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: "1.25rem", marginBottom: 16, fontWeight: 400 }}>
+            Social Media
+          </h3>
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            {contact.socialLinks?.map((link) => (
+              <SocialLinkCard key={link.platform} link={link} />
+            ))}
+          </div>
+        </div>
       </div>
-    </PageOverlay>
+    </PageOverlayWrapper>
   );
 }

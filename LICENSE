@@ -1,0 +1,80 @@
+MIT License with Attribution Requirement
+
+Copyright (c) 2026 Kaan Civelek
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+1. The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+2. ATTRIBUTION REQUIREMENT: Any website, application, or derivative work that uses
+   this Software or substantial portions thereof MUST include a visible footer credit
+   that clearly states:
+   
+   "Based on portfolio design by Kaan Civelek (https://github.com/kaancivelek)"
+   
+   OR
+   
+   "Portfolio template by Kaan Civelek"
+   
+   with a hyperlink to https://github.com/kaancivelek/kaancivelek-portfolio or 
+   the author's GitHub profile at https://github.com/kaancivelek.
+   
+   The attribution must be:
+   - Visible to end users in the footer of the website/application
+   - Not hidden, obfuscated, or removed through CSS or other means
+   - Clearly readable with adequate contrast and font size (minimum 12px)
+
+3. This attribution requirement applies to:
+   - Live deployments of the Software
+   - Modified versions or derivative works
+   - Commercial and non-commercial uses
+   - Both public and private instances accessible to end users
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Attribution Examples
+
+### HTML Footer Example
+```html
+<footer>
+  <p>
+    Portfolio design by 
+    <a href="https://github.com/kaancivelek" target="_blank" rel="noopener">
+      Kaan Civelek
+    </a>
+  </p>
+</footer>
+```
+
+### React Component Example
+```jsx
+<footer style={{ textAlign: 'center', padding: '1rem', fontSize: '0.875rem' }}>
+  Portfolio template by{' '}
+  <a 
+    href="https://github.com/kaancivelek/kaancivelek-portfolio"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Kaan Civelek
+  </a>
+</footer>
+```
+
+---
+
+For questions about this license or attribution requirements, please contact:
+businesskaancivelek@gmail.com

@@ -32,8 +32,7 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({
   // Responsive button ve label boyutu
   const scale = svgSize / 300;
   const buttonSize = 48 * scale;
-  const fontSize = 0.875 * scale;
-  const svgCenter = svgSize / 2;
+  const fontSize = 0.65 * scale;
 
   return (
     <button
@@ -61,13 +60,14 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({
       <span
         style={{
           position: "fixed",
-          top: "50%",
+          top: "47%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           color: "#fff",
           fontSize: `${fontSize}rem`,
-          fontWeight: 300,
-          letterSpacing: "0.1em",
+          fontFamily: "var(--font-aldrich), sans-serif",
+          fontWeight: 400,
+          letterSpacing: "0.25em",
           textTransform: "uppercase",
           opacity: isActive ? 1 : 0,
           pointerEvents: "none",

@@ -20,8 +20,9 @@ export default function PageOverlay({ children, onClose, title }: Readonly<PageO
   }, [onClose]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
+        key={title || "overlay"}
         initial="hidden"
         animate="visible"
         exit="hidden"

@@ -3,8 +3,8 @@ export const ANIMATION_DURATION = 1.5;
 
 // Overlay stilleri
 export const OVERLAY_STYLES = {
-  backdropBlur: 8,
-  backdropOpacity: 0.5,
+  backdropBlur: 20,
+  backdropOpacity: 0.8,
   containerPadding: 40,
   closeButtonSize: 48,
 } as const;

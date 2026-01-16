@@ -16,6 +16,57 @@ import {
   ANIMATION_DURATION, 
   SCALE_FACTOR
 } from "./constants";
+import type { Point } from "./types";
+
+// Static background yıldız komponenti (home dışında, overlay arkasında)
+interface StaticStarProps {
+  svgSize: number;
+  starPoints: Point[];
+  tipPoints: Point[];
+}
+
+function StaticStar({ svgSize, starPoints, tipPoints }: Readonly<StaticStarProps>) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1.5 }}
+      style={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: svgSize,
+        height: svgSize,
+        zIndex: 50,
+        pointerEvents: "none",
+      }}
+    >
+      <svg 
+        width={svgSize} 
+        height={svgSize} 
+        style={{ 
+          position: "absolute", 
+          top: 0,
+          left: 0
+        }}
+      >
+        <StarShape points={starPoints} svgSize={svgSize} />
+        
+        {tipPoints.map((tip, idx) => (
+          <TipLine
+            key={`static-tip-${NAVIGATION_ROUTES[idx]?.path || idx}`}
+            tip={tip}
+            index={idx}
+            isActive={false}
+            svgSize={svgSize}
+          />
+        ))}
+      </svg>
+    </motion.div>
+  );
+}
 
 export default function StarNavigation() {
   const router = useRouter();
@@ -71,53 +122,16 @@ export default function StarNavigation() {
     }
   }, [pathname, isHomePage]);
 
-  // Static background yıldız (home dışında, overlay arkasında)
-  const StaticStar = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1.5 }}
-      style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: svgSize,
-        height: svgSize,
-        zIndex: 50,
-        pointerEvents: "none",
-      }}
-    >
-      <svg 
-        width={svgSize} 
-        height={svgSize} 
-        style={{ 
-          position: "absolute", 
-          top: 0,
-          left: 0
-        }}
-      >
-        <StarShape points={starPoints} svgSize={svgSize} />
-        
-        {tipPoints.map((tip, idx) => (
-          <TipLine
-            key={`static-tip-${NAVIGATION_ROUTES[idx]?.path || idx}`}
-            tip={tip}
-            index={idx}
-            isActive={false}
-            svgSize={svgSize}
-          />
-        ))}
-      </svg>
-    </motion.div>
-  );
-
   // Home dışında static yıldız göster
   if (!isHomePage) {
     return (
       <AnimatePresence mode="wait">
-        <StaticStar />
+        <StaticStar 
+          key={pathname}
+          svgSize={svgSize}
+          starPoints={starPoints}
+          tipPoints={tipPoints}
+        />
       </AnimatePresence>
     );
   }
