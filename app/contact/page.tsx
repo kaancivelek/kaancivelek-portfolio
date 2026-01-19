@@ -1,19 +1,18 @@
-"use client";
+/**
+ * Contact Page
+ * Displays contact information and social links using SSR data fetching.
+ */
 
+import { Metadata } from "next";
 import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
 import { SocialLinkCard } from "@/components/SocialLinkCard";
-import { useData } from "@/contexts/DataContext";
+import { getContactData } from "@/lib/content";
+import { pageMetadata } from "@/config";
 
-export default function ContactPage() {
-  const { contact, contactCtaHtml } = useData();
+export const metadata: Metadata = pageMetadata.contact;
 
-  if (!contact) {
-    return (
-      <PageOverlayWrapper title="Contact">
-        <div style={{ color: "#fff" }}>Loading...</div>
-      </PageOverlayWrapper>
-    );
-  }
+export default async function ContactPage() {
+  const contact = await getContactData();
 
   return (
     <PageOverlayWrapper title="Contact">
@@ -21,7 +20,7 @@ export default function ContactPage() {
         <div
           className="markdown-content"
           style={{ marginBottom: 32 }}
-          dangerouslySetInnerHTML={{ __html: contactCtaHtml }}
+          dangerouslySetInnerHTML={{ __html: contact.ctaHtml || "" }}
         />
 
         <div

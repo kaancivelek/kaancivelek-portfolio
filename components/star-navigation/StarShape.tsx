@@ -1,3 +1,8 @@
+/**
+ * StarShape Component
+ * Renders the star polygon SVG with responsive stroke width.
+ */
+
 import React from "react";
 import { Point } from "./types";
 
@@ -7,7 +12,7 @@ interface StarShapeProps {
 }
 
 export const StarShape: React.FC<StarShapeProps> = ({ points, svgSize }) => {
-  // Responsive stroke width: base 300px için 2px
+  // Responsive stroke width: 2px at base 300px size
   const strokeWidth = (svgSize / 300) * 2;
   
   return (

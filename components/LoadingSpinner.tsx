@@ -1,7 +1,14 @@
+/**
+ * LoadingSpinner Component
+ * Displays an animated ASCII loading indicator during initial hydration.
+ * Client component - requires useState and useEffect for animation.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
 
+/** ASCII animation frames for loading indicator */
 const LOADING_FRAMES = ["+--", "-+-", "--+", "-+-"];
 
 export function LoadingSpinner() {
@@ -38,6 +45,8 @@ export function LoadingSpinner() {
           color: "#fff",
           letterSpacing: "0.5em",
           marginBottom: "1rem",
+          textAlign: "center",
+          marginRight: "-0.3em",
         }}
       >
         {LOADING_FRAMES[frame]}
@@ -48,6 +57,7 @@ export function LoadingSpinner() {
           fontSize: "0.875rem",
           fontFamily: "var(--font-aldrich), sans-serif",
           letterSpacing: "0.2em",
+          textAlign: "center",
         }}
       >
         LOADING

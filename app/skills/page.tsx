@@ -1,19 +1,18 @@
-"use client";
+/**
+ * Skills Page
+ * Displays technical skills using SSR data fetching.
+ */
 
+import { Metadata } from "next";
 import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
 import { SkillCard } from "@/components/SkillCard";
-import { useData } from "@/contexts/DataContext";
+import { getSkills } from "@/lib/content";
+import { pageMetadata } from "@/config";
 
-export default function SkillsPage() {
-  const { about } = useData();
+export const metadata: Metadata = pageMetadata.skills;
 
-  if (!about?.skills?.primary || !about?.skills?.secondary) {
-    return (
-      <PageOverlayWrapper title="Skills">
-        <div style={{ color: "#fff" }}>Loading...</div>
-      </PageOverlayWrapper>
-    );
-  }
+export default async function SkillsPage() {
+  const skills = await getSkills();
 
   return (
     <PageOverlayWrapper title="Skills">
@@ -22,8 +21,14 @@ export default function SkillsPage() {
           <h3 style={{ fontSize: "1.5rem", marginBottom: 20, fontWeight: 400 }}>
             Primary Skills
           </h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
-            {about.skills.primary.map((skill) => (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+              gap: 12,
+            }}
+          >
+            {skills.primary.map((skill) => (
               <SkillCard key={skill} skill={skill} isPrimary />
             ))}
           </div>
@@ -34,7 +39,7 @@ export default function SkillsPage() {
             Secondary Skills
           </h3>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            {about.skills.secondary.map((skill) => (
+            {skills.secondary.map((skill) => (
               <SkillCard key={skill} skill={skill} />
             ))}
           </div>
@@ -42,4 +47,4 @@ export default function SkillsPage() {
       </div>
     </PageOverlayWrapper>
   );
-} 
+}

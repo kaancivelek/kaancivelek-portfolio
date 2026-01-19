@@ -1,39 +1,68 @@
-"use client";
+/**
+ * Project Detail Page
+ * Displays detailed project information using SSR and static generation.
+ */
 
-import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
-import { useData } from "@/contexts/DataContext";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
 import { ProjectLinkButton } from "@/components/ProjectLinkButton";
-import { use } from "react";
+import { getProjectBySlug, getAllProjectSlugs } from "@/lib/content";
+import { generateProjectMetadata } from "@/config";
 
-export default function ProjectDetailPage({
-  params,
-}: Readonly<{
-  params: Promise<{ slug: string }>;
-}>) {
-  const { slug } = use(params);
-  const { projects, projectDetails } = useData();
-  
-  if (!projects || !projectDetails) {
-    return (
-      <PageOverlayWrapper title="Loading...">
-        <div style={{ color: "#fff" }}>Loading...</div>
-      </PageOverlayWrapper>
-    );
+// Force static generation for all project pages
+export const dynamic = "force-static";
+export const dynamicParams = false;
+
+interface Props {
+  readonly params: Promise<{ slug: string }>;
+}
+
+/**
+ * Generate static params for all project slugs at build time.
+ */
+export async function generateStaticParams() {
+  const slugs = await getAllProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
+/**
+ * Generate metadata for each project page.
+ */
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
+
+  if (!project) {
+    return { title: "Project Not Found" };
   }
-  
-  const project = projects.find((p) => p.slug === slug);
-  
+
+  return generateProjectMetadata(project);
+}
+
+export default async function ProjectDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
+
   if (!project) {
     notFound();
   }
 
-  const detailHtml = projectDetails[slug] || "<p>Project details are being updated...</p>";
+  const detailHtml =
+    project.contentHtml || "<p>Project details are being updated...</p>";
 
   return (
     <PageOverlayWrapper title={project.title}>
       <div style={{ color: "#fff" }}>
-        <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            marginBottom: 24,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
           {project.tags.map((tag, index) => (
             <span
               key={`${tag}-${index}`}

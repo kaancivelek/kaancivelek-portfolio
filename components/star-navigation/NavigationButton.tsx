@@ -1,3 +1,9 @@
+/**
+ * NavigationButton Component
+ * Interactive button positioned at each star tip.
+ * Handles hover, focus, and click interactions.
+ */
+
 import React from "react";
 import { Point } from "./types";
 
@@ -29,7 +35,7 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({
     }
   };
 
-  // Responsive button ve label boyutu
+  // Calculate responsive button and label sizes
   const scale = svgSize / 300;
   const buttonSize = 48 * scale;
   const fontSize = 0.65 * scale;

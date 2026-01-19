@@ -1,3 +1,8 @@
+/**
+ * Star Navigation Utilities
+ * Helper functions for generating star geometry.
+ */
+
 import { Point } from "./types";
 import { STAR_POINTS } from "./constants";
 

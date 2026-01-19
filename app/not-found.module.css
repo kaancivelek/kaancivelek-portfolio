@@ -1,0 +1,28 @@
+/**
+ * Global Not Found Page Styles
+ * CSS Module for 404 page with hover/focus states.
+ */
+
+.link {
+  padding: 12px 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.link:focus,
+.link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}

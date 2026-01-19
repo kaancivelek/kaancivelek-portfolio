@@ -1,0 +1,84 @@
+/**
+ * ProjectCard Component Styles
+ * CSS Module for ProjectCard hover effects.
+ */
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.link:hover .card,
+.link:focus .card {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.featuredBadge {
+  padding: 4px 8px;
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd900;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.description {
+  color: #999;
+  margin-bottom: 16px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.footer {
+  display: flex;
+  gap: 12px;
+  font-size: 0.875rem;
+  align-items: center;
+}
+
+.meta {
+  color: #999;
+}
+
+.viewDetails {
+  color: #4ade80;
+  margin-left: auto;
+}

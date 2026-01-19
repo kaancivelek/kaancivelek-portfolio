@@ -1,3 +1,9 @@
+/**
+ * TipLine Component
+ * Animated gradient line extending from star tips.
+ * Extends when hovered/active.
+ */
+
 import React from "react";
 import { motion } from "framer-motion";
 import { Point } from "./types";
@@ -12,7 +18,7 @@ interface TipLineProps {
 }
 
 export const TipLine: React.FC<TipLineProps> = ({ tip, index, isActive, svgSize }) => {
-  // Çizgi uzunluğunu SVG boyutuna göre ölçeklendir
+  // Scale line length based on SVG size
   const scale = svgSize / 300;
   const length = isActive 
     ? TIP_LINE_ACTIVE_LENGTH * scale 

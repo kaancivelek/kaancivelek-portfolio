@@ -1,41 +1,29 @@
-"use client";
+/**
+ * SocialLinkCard Component
+ * Displays a social media link card with platform and username.
+ * Server component using CSS modules for hover effects.
+ */
 
-import { useState } from "react";
+import styles from "./SocialLinkCard.module.css";
 
 interface SocialLinkCardProps {
-  link: {
+  readonly link: {
     platform: string;
     url: string;
     username: string;
   };
 }
 
-export function SocialLinkCard({ link }: Readonly<SocialLinkCardProps>) {
-  const [isHovered, setIsHovered] = useState(false);
-
+export function SocialLinkCard({ link }: SocialLinkCardProps) {
   return (
     <a
       href={link.url}
       target="_blank"
       rel="noopener noreferrer"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        padding: "12px 20px",
-        background: isHovered ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.05)",
-        borderRadius: 8,
-        textDecoration: "none",
-        transition: "background 0.2s",
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className={styles.card}
     >
-      <span style={{ color: "#fff", fontWeight: 500 }}>
-        {link.platform}
-      </span>
-      <span style={{ color: "#999", fontSize: "0.875rem" }}>
-        {link.username}
-      </span>
+      <span className={styles.platform}>{link.platform}</span>
+      <span className={styles.username}>{link.username}</span>
     </a>
   );
 }

@@ -1,24 +1,29 @@
-"use client";
+/**
+ * Experience Page
+ * Displays work experience using SSR data fetching.
+ */
 
+import { Metadata } from "next";
 import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
-import { useData } from "@/contexts/DataContext";
+import { getExperiences } from "@/lib/content";
+import { pageMetadata } from "@/config";
 
+export const metadata: Metadata = pageMetadata.experience;
+
+/**
+ * Formats a date string (YYYY-MM) to readable format (Mon YYYY).
+ */
 function formatDate(dateStr: string): string {
   const [year, month] = dateStr.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  ];
   return `${months[Number.parseInt(month) - 1]} ${year}`;
 }
 
-export default function ExperiencePage() {
-  const { experiences } = useData();
-
-  if (!experiences || experiences.length === 0) {
-    return (
-      <PageOverlayWrapper title="Experience">
-        <div style={{ color: "#fff" }}>Loading...</div>
-      </PageOverlayWrapper>
-    );
-  }
+export default async function ExperiencePage() {
+  const experiences = await getExperiences();
 
   return (
     <PageOverlayWrapper title="Experience">
@@ -29,12 +34,28 @@ export default function ExperiencePage() {
             style={{
               marginBottom: 32,
               paddingBottom: index < experiences.length - 1 ? 32 : 0,
-              borderBottom: index < experiences.length - 1 ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
+              borderBottom:
+                index < experiences.length - 1
+                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  : "none",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 8 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "start",
+                marginBottom: 8,
+              }}
+            >
               <div>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 400, marginBottom: 4 }}>
+                <h3
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: 400,
+                    marginBottom: 4,
+                  }}
+                >
                   {exp.position}
                 </h3>
                 <p style={{ color: "#999", fontSize: "1.1rem" }}>
@@ -57,21 +78,36 @@ export default function ExperiencePage() {
               )}
             </div>
 
-            <p style={{ color: "#666", fontSize: "0.875rem", marginBottom: 16 }}>
-              {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : "Present"} • {exp.type}
+            <p
+              style={{ color: "#666", fontSize: "0.875rem", marginBottom: 16 }}
+            >
+              {formatDate(exp.startDate)} -{" "}
+              {exp.endDate ? formatDate(exp.endDate) : "Present"} • {exp.type}
             </p>
 
             <div style={{ marginBottom: 16 }}>
-              <h4 style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 500 }}>Key Achievements:</h4>
-              <ul style={{ paddingLeft: "1.5rem", lineHeight: 1.8, color: "#ccc" }}>
+              <h4
+                style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 500 }}
+              >
+                Key Achievements:
+              </h4>
+              <ul
+                style={{ paddingLeft: "1.5rem", lineHeight: 1.8, color: "#ccc" }}
+              >
                 {exp.achievements.map((achievement) => (
-                  <li key={achievement} style={{ marginBottom: 6 }}>{achievement}</li>
+                  <li key={achievement} style={{ marginBottom: 6 }}>
+                    {achievement}
+                  </li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <h4 style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 500 }}>Technologies:</h4>
+              <h4
+                style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 500 }}
+              >
+                Technologies:
+              </h4>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {exp.technologies.map((tech) => (
                   <span

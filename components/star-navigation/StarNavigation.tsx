@@ -1,3 +1,9 @@
+/**
+ * StarNavigation Component
+ * Main star-shaped navigation that appears on the home page.
+ * Client component - requires Framer Motion animations and router.
+ */
+
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -18,7 +24,10 @@ import {
 } from "./constants";
 import type { Point } from "./types";
 
-// Static background yıldız komponenti (home dışında, overlay arkasında)
+/**
+ * Static Star Component
+ * Shows a faded star in the background when on overlay pages.
+ */
 interface StaticStarProps {
   svgSize: number;
   starPoints: Point[];
@@ -29,7 +38,7 @@ function StaticStar({ svgSize, starPoints, tipPoints }: Readonly<StaticStarProps
   return (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={{ opacity: 0.15 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1.5 }}
       style={{
@@ -75,7 +84,7 @@ export default function StarNavigation() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [svgSize, setSvgSize] = useState(BASE_SVG_SIZE * SIZE_MULTIPLIER);
   
-  // Sadece home sayfasında göster
+  // Only show interactive star on home page
   const isHomePage = pathname === "/";
 
   // SSR-safe: Client-side'da gerçek ekran boyutunu hesapla
@@ -196,6 +205,36 @@ export default function StarNavigation() {
               tipIndex={idx}
             />
           ))}
+
+          {/* Center name - shown when no navigation is hovered */}
+          <AnimatePresence>
+            {activeIndex === null && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  position: "fixed",
+                  top: "43%",
+                  left: "33%",
+                  transform: "translate(-50%, -50%)",
+                  color: "#fff",
+                  fontSize: `${0.65 * (svgSize / 300)}rem`,
+                  fontFamily: "var(--font-aldrich), sans-serif",
+                  fontWeight: 400,
+                  letterSpacing: "0.25em",
+                  textTransform: "uppercase",
+                  pointerEvents: "none",
+                  userSelect: "none",
+                  whiteSpace: "nowrap",
+                  zIndex: 20,
+                }}
+              >
+                Kaan Civelek
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

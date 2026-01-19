@@ -1,18 +1,17 @@
-"use client";
+/**
+ * About Page
+ * Displays personal information and bio using SSR data fetching.
+ */
 
+import { Metadata } from "next";
 import { PageOverlayWrapper } from "@/components/page-overlay/PageOverlayWrapper";
-import { useData } from "@/contexts/DataContext";
+import { getAboutData } from "@/lib/content";
+import { pageMetadata } from "@/config";
 
-export default function AboutPage() {
-  const { about, aboutBioHtml } = useData();
+export const metadata: Metadata = pageMetadata.about;
 
-  if (!about) {
-    return (
-      <PageOverlayWrapper title="About">
-        <div style={{ color: "#fff" }}>Loading...</div>
-      </PageOverlayWrapper>
-    );
-  }
+export default async function AboutPage() {
+  const about = await getAboutData();
 
   return (
     <PageOverlayWrapper title="About">
@@ -26,7 +25,7 @@ export default function AboutPage() {
           <div
             style={{ marginBottom: 0 }}
             className="markdown-content"
-            dangerouslySetInnerHTML={{ __html: aboutBioHtml }}
+            dangerouslySetInnerHTML={{ __html: about.bioHtml || "" }}
           />
         </div>
       </div>

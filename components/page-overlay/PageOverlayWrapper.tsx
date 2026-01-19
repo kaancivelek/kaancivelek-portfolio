@@ -1,3 +1,11 @@
+/**
+ * PageOverlayWrapper Component
+ * Client component that handles overlay interactions and animations.
+ * - Handles ESC key to close
+ * - Animates overlay with Framer Motion
+ * - Uses router for navigation
+ */
+
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
@@ -11,9 +19,6 @@ interface PageOverlayWrapperProps {
   title?: string;
 }
 
-/**
- * Client Component - Sadece etkileşim ve animasyon logic
- */
 export function PageOverlayWrapper({ children, title }: Readonly<PageOverlayWrapperProps>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -22,7 +27,7 @@ export function PageOverlayWrapper({ children, title }: Readonly<PageOverlayWrap
     router.push("/");
   };
 
-  // ESC tuşu ile kapatma
+  // Close overlay on ESC key press
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {

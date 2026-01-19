@@ -1,14 +1,19 @@
+/**
+ * Star Navigation Constants
+ * Configuration values for the star-shaped navigation component.
+ */
+
 export const STAR_POINTS = 5;
 
-// Base değerler (SSR için varsayılan)
+// Base values (SSR defaults)
 export const BASE_SVG_SIZE = 300;
-export const SIZE_MULTIPLIER = 1.2; 
+export const SIZE_MULTIPLIER = 1.2;
 
-// Oranlar (responsive için)
-export const OUTER_RADIUS_RATIO = 0.4; // SVG boyutunun %40'ı
-export const INNER_RADIUS_RATIO = 0.167; // SVG boyutunun %16.7'si
-export const TIP_LINE_BASE_LENGTH = 16; // Çizgi uzunluk oranı
-export const TIP_LINE_ACTIVE_LENGTH = 50; // Aktif çizgi uzunluk oranı
+// Ratios for responsive sizing
+export const OUTER_RADIUS_RATIO = 0.4; // 40% of SVG size
+export const INNER_RADIUS_RATIO = 0.167; // 16.7% of SVG size
+export const TIP_LINE_BASE_LENGTH = 16; // Default line length
+export const TIP_LINE_ACTIVE_LENGTH = 50; // Extended line length on hover
 
 export const ANIMATION_DURATION = 1500;
 export const SCALE_FACTOR = 5;
