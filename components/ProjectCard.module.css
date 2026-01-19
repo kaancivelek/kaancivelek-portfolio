@@ -18,6 +18,7 @@
   transition: all 0.2s;
   outline: 2px solid transparent;
   outline-offset: 2px;
+  overflow: hidden;
 }
 
 .link:hover .card,
@@ -33,11 +34,15 @@
   justify-content: space-between;
   align-items: start;
   margin-bottom: 12px;
+  gap: 12px;
 }
 
 .title {
   font-size: 1.5rem;
   font-weight: 400;
+  word-break: break-word;
+  flex: 1;
+  min-width: 0;
 }
 
 .featuredBadge {
@@ -46,11 +51,15 @@
   color: #ffd900;
   border-radius: 4px;
   font-size: 0.75rem;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .description {
   color: #999;
   margin-bottom: 16px;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .tags {
@@ -65,6 +74,7 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   font-size: 0.8rem;
+  word-break: break-word;
 }
 
 .footer {
@@ -72,13 +82,75 @@
   gap: 12px;
   font-size: 0.875rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .meta {
   color: #999;
+  word-break: break-word;
 }
 
 .viewDetails {
   color: #4ade80;
   margin-left: auto;
+  white-space: nowrap;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .featuredBadge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+
+  .footer {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+  }
+
+  .footer {
+    font-size: 0.75rem;
+  }
+
+  .viewDetails {
+    margin-left: 0;
+    width: 100%;
+    text-align: right;
+  }
 }

@@ -60,6 +60,7 @@ export default function PageOverlay({ children, onClose, title }: Readonly<PageO
             ease: [0.68, -0.55, 0.27, 1.55]
           }}
           onClick={(e) => e.stopPropagation()}
+          className="page-overlay-content"
           style={{
             position: "relative",
             width: "100%",
@@ -68,21 +69,25 @@ export default function PageOverlay({ children, onClose, title }: Readonly<PageO
             background: "rgba(26, 26, 26, 0.7)",
             backdropFilter: "blur(40px) saturate(180%)",
             WebkitBackdropFilter: "blur(40px) saturate(180%)",
-            borderRadius: 24,
+            borderRadius: "clamp(12px, 3vw, 24px)",
             border: "1px solid rgba(255, 255, 255, 0.18)",
             boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.05)",
             overflow: "auto",
-            padding: 48,
+            padding: "clamp(16px, 4vw, 48px)",
+            overflowWrap: "break-word",
+            wordBreak: "break-word",
           }}
         >
           {title && (
             <h1
               style={{
                 color: "#fff",
-                fontSize: "2rem",
+                fontSize: "clamp(1.5rem, 5vw, 2rem)",
                 fontWeight: 300,
-                marginBottom: 32,
+                marginBottom: "clamp(16px, 3vw, 32px)",
                 letterSpacing: "0.05em",
+                wordBreak: "break-word",
+                overflowWrap: "break-word",
               }}
             >
               {title}

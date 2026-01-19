@@ -57,8 +57,8 @@ export default async function ProjectDetailPage({ params }: Props) {
         <div
           style={{
             display: "flex",
-            gap: 12,
-            marginBottom: 24,
+            gap: "clamp(8px, 2vw, 12px)",
+            marginBottom: "clamp(16px, 3vw, 24px)",
             flexWrap: "wrap",
             alignItems: "center",
           }}
@@ -67,22 +67,23 @@ export default async function ProjectDetailPage({ params }: Props) {
             <span
               key={`${tag}-${index}`}
               style={{
-                padding: "6px 12px",
+                padding: "clamp(4px, 1vw, 6px) clamp(8px, 2vw, 12px)",
                 background: "rgba(255, 255, 255, 0.1)",
                 borderRadius: 6,
-                fontSize: "0.875rem",
+                fontSize: "clamp(0.75rem, 2vw, 0.875rem)",
+                wordBreak: "break-word",
               }}
             >
               {tag}
             </span>
           ))}
-          <span style={{ marginLeft: "auto", color: "#666" }}>
+          <span style={{ marginLeft: "auto", color: "#666", fontSize: "clamp(0.75rem, 2vw, 0.875rem)", whiteSpace: "nowrap" }}>
             {project.year} • {project.status}
           </span>
         </div>
 
         {project.links && (
-          <div style={{ display: "flex", gap: 16, marginBottom: 32 }}>
+          <div style={{ display: "flex", gap: "clamp(8px, 2vw, 16px)", marginBottom: "clamp(16px, 3vw, 32px)", flexWrap: "wrap" }}>
             {project.links.live && (
               <ProjectLinkButton href={project.links.live} type="live">
                 🚀 Live Demo

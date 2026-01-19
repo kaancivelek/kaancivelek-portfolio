@@ -210,7 +210,7 @@ const TimelineCard = ({ project, index }: TimelineCardProps) => {
           }}
         />
       </div>
-Empty space for layout
+
       {/* Boş alan */}
       <div style={{ width: "50%" }} />
     </motion.div>

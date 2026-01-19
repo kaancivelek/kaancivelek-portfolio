@@ -17,12 +17,13 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ onClose, size = 48 }) 
       whileTap={{ scale: 0.95 }}
       onClick={onClose}
       aria-label="Close"
+      className="close-button-responsive"
       style={{
         position: "fixed",
-        top: 32,
-        right: 32,
-        width: size,
-        height: size,
+        top: "clamp(12px, 3vw, 32px)",
+        right: "clamp(12px, 3vw, 32px)",
+        width: `clamp(36px, ${size}px, ${size}px)`,
+        height: `clamp(36px, ${size}px, ${size}px)`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
