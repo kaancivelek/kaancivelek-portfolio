@@ -13,12 +13,9 @@ export interface SocialLinks {
 }
 
 /**
- * Skills categorization
+ * Skills categorization by domain
  */
-export interface Skills {
-  primary: string[];
-  secondary: string[];
-}
+export type Skills = Record<string, string[]>;
 
 /**
  * About/Profile data from JSON

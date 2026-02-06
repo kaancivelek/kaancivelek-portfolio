@@ -36,16 +36,16 @@ export default async function ContactPage() {
           </h3>
           <div style={{ lineHeight: 1.8, color: "#ccc" }}>
             <p>
-              📧 <strong>Email:</strong> {contact.contact.email}
+              <strong>Email:</strong> {contact.contact.email}
             </p>
             <p>
-              ⏰ <strong>Timezone:</strong> {contact.contact.timezone}
+              <strong>Timezone:</strong> {contact.contact.timezone}
             </p>
             <p>
-              ⚡ <strong>Response Time:</strong> {contact.contact.responseTime}
+              <strong>Response Time:</strong> {contact.contact.responseTime}
             </p>
             <p style={{ marginTop: 12, color: "#4ade80" }}>
-              ✨ {contact.contact.availability}
+              {contact.contact.availability}
             </p>
           </div>
         </div>

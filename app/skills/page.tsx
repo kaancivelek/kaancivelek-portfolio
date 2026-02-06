@@ -13,37 +13,37 @@ export const metadata: Metadata = pageMetadata.skills;
 
 export default async function SkillsPage() {
   const skills = await getSkills();
+  const categories = Object.entries(skills);
 
   return (
     <PageOverlayWrapper title="Skills">
       <div style={{ color: "#fff" }}>
-        <div style={{ marginBottom: 40 }}>
-          <h3 style={{ fontSize: "1.5rem", marginBottom: 20, fontWeight: 400 }}>
-            Primary Skills
-          </h3>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-              gap: 12,
-            }}
-          >
-            {skills.primary.map((skill) => (
-              <SkillCard key={skill} skill={skill} isPrimary />
-            ))}
+        {categories.map(([category, items], index) => (
+          <div key={category} style={{ marginBottom: index < categories.length - 1 ? 32 : 0 }}>
+            <h3 style={{ fontSize: "1.25rem", marginBottom: 16, fontWeight: 400 }}>
+              {category}
+            </h3>
+            {index === 0 ? (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                  gap: 12,
+                }}
+              >
+                {items.map((skill) => (
+                  <SkillCard key={skill} skill={skill} isPrimary />
+                ))}
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                {items.map((skill) => (
+                  <SkillCard key={skill} skill={skill} />
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-
-        <div>
-          <h3 style={{ fontSize: "1.5rem", marginBottom: 20, fontWeight: 400 }}>
-            Secondary Skills
-          </h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            {skills.secondary.map((skill) => (
-              <SkillCard key={skill} skill={skill} />
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </PageOverlayWrapper>
   );

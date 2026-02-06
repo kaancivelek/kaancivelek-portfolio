@@ -2,20 +2,20 @@
   "experiences": [
     {
       "id": "exp-it-consultant",
-      "company": "Science High School",
+      "company": "Gelibolu Science High School",
       "position": "IT Consultant Intern",
-      "location": "Remote / On-site",
+      "location": "Gelibolu, Canakkale",
       "type": "Internship",
       "startDate": "2021-09",
       "endDate": "2022-06",
       "current": false,
       "description": "experience/it-consultant-intern.md",
       "achievements": [
-        "Supported teachers and students with day‑to‑day IT issues",
-        "Helped maintain and troubleshoot school computer systems",
-        "Improved communication between technical and non‑technical stakeholders"
+        "Contributed to the sustainability of the institution's IT infrastructure",
+        "Provided technical support and training to staff members",
+        "Took an active role in resolving daily operational issues"
       ],
-      "technologies": ["Windows Administration", "Networking Basics", "Office Tools"]
+      "technologies": ["Windows Administration", "Networking", "Technical Support"]
     }
   ]
 }

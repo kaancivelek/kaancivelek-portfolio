@@ -14,6 +14,7 @@ import { unstable_cache } from "next/cache";
 import type {
   About,
   AboutWithContent,
+  Skills,
   Project,
   ProjectWithContent,
   Experience,
@@ -205,10 +206,7 @@ export const getContactData = cache(
  * Cached for request deduplication.
  * Use in skills page for SSR.
  */
-export const getSkills = cache(async function (): Promise<{
-  primary: string[];
-  secondary: string[];
-}> {
+export const getSkills = cache(async function (): Promise<Skills> {
   const about = await getJsonData<About>("about.json");
   return about.skills;
 });

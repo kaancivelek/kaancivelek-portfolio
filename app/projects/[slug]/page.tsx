@@ -86,12 +86,12 @@ export default async function ProjectDetailPage({ params }: Props) {
           <div style={{ display: "flex", gap: "clamp(8px, 2vw, 16px)", marginBottom: "clamp(16px, 3vw, 32px)", flexWrap: "wrap" }}>
             {project.links.live && (
               <ProjectLinkButton href={project.links.live} type="live">
-                🚀 Live Demo
+                Live Demo
               </ProjectLinkButton>
             )}
             {project.links.github && (
               <ProjectLinkButton href={project.links.github} type="github">
-                💻 GitHub
+                GitHub
               </ProjectLinkButton>
             )}
           </div>
