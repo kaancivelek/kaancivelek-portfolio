@@ -26,7 +26,7 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({
   onMouseEnter,
   onMouseLeave,
   svgSize,
-  tipIndex,
+  
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {

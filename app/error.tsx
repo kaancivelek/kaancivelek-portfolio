@@ -4,7 +4,7 @@
  */
 
 "use client";
-
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function GlobalError({
@@ -79,7 +79,7 @@ export default function GlobalError({
         >
           Try Again
         </button>
-        <a
+        <Link
           href="/"
           style={{
             padding: "12px 24px",
@@ -93,7 +93,7 @@ export default function GlobalError({
           }}
         >
           Go Home
-        </a>
+        </Link>
       </div>
     </div>
   );

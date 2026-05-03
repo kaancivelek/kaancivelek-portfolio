@@ -16,7 +16,7 @@ export function PageOverlayLayout({ children, title, onClose }: Readonly<PageOve
   return (
     <div
       style={{
-        position: "fixed",
+        position: "relative",
         top: 0,
         left: 0,
         right: 0,
@@ -36,9 +36,7 @@ export function PageOverlayLayout({ children, title, onClose }: Readonly<PageOve
           width: "100%",
           maxWidth: 1200,
           maxHeight: "90vh",
-          background: "#1a1a1a",
           borderRadius: 24,
-          border: "1px solid rgba(255, 255, 255, 0.1)",
           overflow: "auto",
           padding: 48,
           scrollbarWidth: "none", // Firefox

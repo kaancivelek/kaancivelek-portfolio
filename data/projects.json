@@ -24,7 +24,7 @@
       "detailedDescription": "projects/spy-ai-detector.md",
       "image": "/projects/spy.jpg",
       "tags": ["Python", "Flask", "React", "BERT", "Machine Learning"],
-      "featured": true,
+      "featured": false,
       "year": 2025,
       "status": "completed"
     },
@@ -36,7 +36,7 @@
       "detailedDescription": "projects/minik-tiny-house-platform.md",
       "image": "/projects/minik.jpg",
       "tags": ["C#", "ASP.NET Core", "React", "MSSQL", "ADO.NET"],
-      "featured": true,
+      "featured": false,
       "year": 2024,
       "status": "completed"
     },
@@ -48,7 +48,7 @@
       "detailedDescription": "projects/haviz-local-weather.md",
       "image": "/projects/haviz.jpg",
       "tags": ["Python", "C#", "ASP.NET MVC", "XGBoost", "Node.js", "MySQL"],
-      "featured": true,
+      "featured": false,
       "year": 2025,
       "status": "completed"
     },
@@ -63,6 +63,24 @@
       "featured": false,
       "year": 2024,
       "status": "completed"
-    }
+    },
+    { 
+  "id": "pisti-2026",
+  "title": "Pişti Recipe Platform",
+  "slug": "pisti-recipe-platform",
+  "description": "A high-performance recipe discovery platform featuring 7000+ recipes, optimized search, advanced filtering, and a minimal user experience built with Next.js, MongoDB, Redis, and GSAP.",
+  "detailedDescription": "projects/pisti.md",
+  "image": "/projects/pisti.jpg",
+  "tags": ["Next.js", "MongoDB", "Redis", "GSAP"],
+  "featured": true,
+  "year": 2026,
+  "status": "active",
+  "links": {
+    "live": "https://pistii.vercel.app",
+    "github": "https://github.com/kaancivelek/pisti"
+  }
+}
+    
+
   ]
 }

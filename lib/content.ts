@@ -39,13 +39,11 @@ async function readJsonFile<T>(filename: string): Promise<T> {
   return JSON.parse(fileContents);
 }
 
-export const getJsonData = cache(async function <T>(
-  filename: string
-): Promise<T> {
+export const getJsonData = cache(async function <T>(filename: string): Promise<T> {
   return unstable_cache(
     async () => readJsonFile<T>(filename),
     [`json-${filename}`],
-    { revalidate: false }
+    { revalidate: process.env.NODE_ENV === "development" ? 5 : 3600 }
   )();
 });
 
@@ -108,10 +106,10 @@ export const getAboutData = cache(async function (): Promise<AboutWithContent> {
  * Cached for request deduplication.
  * Use in projects list page for SSR.
  */
-export const getProjects = cache(async function (): Promise<Project[]> {
+export async function getProjects(): Promise<Project[]> {
   const data = await getJsonData<{ projects: Project[] }>("projects.json");
   return data.projects;
-});
+}
 
 /**
  * Fetches a single project by slug with resolved content.

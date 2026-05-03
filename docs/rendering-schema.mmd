@@ -1,0 +1,30 @@
+flowchart TD
+  A[Request] --> B{Route Type}
+
+  B -->|/| C[Home Shell]
+  B -->|/about /projects /skills /experience /contact| D[Overlay Page Route]
+  B -->|/projects/:slug| E[Project Detail Route]
+
+  C --> F[Server Render Layout]
+  D --> F
+  E --> F
+
+  F --> G[App Router Server Components]
+  G --> H[Content Layer lib/content.ts]
+  H --> I[data/*.json + data/*.md]
+
+  G --> J[Static Generation + Cache]
+  J --> K[Pre-rendered HTML]
+
+  K --> L[Client Hydration]
+  L --> M[StarNavigation GSAP]
+  L --> N[PageOverlayWrapper GSAP]
+  L --> O[ProjectTimeline GSAP]
+
+  P[SEO Artifacts] --> Q[app/sitemap.ts]
+  P --> R[app/robots.ts]
+  P --> S[public/llms.txt]
+
+  Q --> T[Crawlers]
+  R --> T
+  S --> U[LLM Crawlers]

@@ -1,14 +1,8 @@
-/**
- * ProjectTimeline Component
- * Displays projects in a vertical timeline layout with scroll animations.
- * Client component - requires Framer Motion for animations.
- */
-
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, useAnimation, useInView } from "framer-motion";
+import gsap from "gsap";
 
 /** Project data structure for timeline display */
 interface Project {
@@ -64,31 +58,114 @@ interface TimelineCardProps {
 }
 
 const TimelineCard = ({ project, index }: TimelineCardProps) => {
-  const cardRef = useRef(null);
-  const isInView = useInView(cardRef, { once: true, margin: "-50px" });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    }
-  }, [isInView, controls]);
-
+  const itemRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const dotRef = useRef<HTMLDivElement | null>(null);
   const isLeft = index % 2 === 0;
 
-  return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, x: isLeft ? -50 : 50, y: 20 }}
-      animate={controls}
-      variants={{
-        visible: {
+  useEffect(() => {
+    const item = itemRef.current;
+
+    if (!item) {
+      return;
+    }
+
+    const prefersReducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const initialX = isLeft ? -50 : 50;
+
+    gsap.killTweensOf(item);
+    gsap.set(item, {
+      opacity: prefersReducedMotion ? 1 : 0,
+      x: prefersReducedMotion ? 0 : initialX,
+      y: prefersReducedMotion ? 0 : 20,
+    });
+
+    if (dotRef.current) {
+      gsap.killTweensOf(dotRef.current);
+      gsap.set(dotRef.current, {
+        opacity: prefersReducedMotion ? 1 : 0,
+        scale: prefersReducedMotion ? 1 : 0,
+      });
+    }
+
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          return;
+        }
+
+        gsap.to(item, {
           opacity: 1,
           x: 0,
           y: 0,
-          transition: { duration: 0.6, ease: "easeOut" },
-        },
-      }}
+          duration: 0.7,
+          ease: "power3.out",
+        });
+
+        if (dotRef.current) {
+          gsap.to(dotRef.current, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.45,
+            ease: "back.out(1.7)",
+            delay: 0.15,
+          });
+        }
+
+        observer.disconnect();
+      },
+      {
+        threshold: 0.25,
+        rootMargin: "-50px",
+      }
+    );
+
+    observer.observe(item);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isLeft]);
+
+  const handleMouseEnter = () => {
+    const card = cardRef.current;
+
+    if (!card || globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    gsap.to(cardRef.current, {
+      scale: 1.03,
+      y: -4,
+      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+      duration: 0.25,
+      ease: "power2.out",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+
+    if (!card || globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    gsap.to(cardRef.current, {
+      scale: 1,
+      y: 0,
+      boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
+      duration: 0.25,
+      ease: "power2.out",
+    });
+  };
+
+  return (
+    <div
+      ref={itemRef}
       style={{
         display: "flex",
         alignItems: "center",
@@ -103,9 +180,10 @@ const TimelineCard = ({ project, index }: TimelineCardProps) => {
           href={`/projects/${project.slug}`}
           style={{ textDecoration: "none", color: "inherit", display: "block" }}
         >
-          <motion.div
-            whileHover={{ scale: 1.03, y: -4, boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)" }}
-            whileTap={{ scale: 0.98 }}
+          <div
+            ref={cardRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             style={{
               background: "rgba(255, 255, 255, 0.05)",
               backdropFilter: "blur(10px)",
@@ -116,6 +194,7 @@ const TimelineCard = ({ project, index }: TimelineCardProps) => {
               outline: "2px solid transparent",
               outlineOffset: "2px",
               transition: "outline 0.2s",
+              willChange: "transform, opacity, box-shadow",
             }}
           >
             {/* Title and year */}
@@ -191,29 +270,30 @@ const TimelineCard = ({ project, index }: TimelineCardProps) => {
               {project.status}
             </div>
           )}
-        </motion.div>
+          </div>
         </Link>
       </div>
 
       {/* Center dot with glow animation */}
       <div style={{ width: "40px", display: "flex", justifyContent: "center", zIndex: 10 }}>
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={isInView ? { scale: 1 } : { scale: 0 }}
-          transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
+        <div
+          ref={dotRef}
           style={{
             width: "20px",
             height: "20px",
             borderRadius: "50%",
             backgroundColor: "rgba(255, 255, 255, 0.6)",
             border: "4px solid rgba(0, 0, 0, 0.9)",
+            transform: "scale(0)",
+            opacity: 0,
+            willChange: "transform, opacity",
           }}
         />
       </div>
 
       {/* Boş alan */}
       <div style={{ width: "50%" }} />
-    </motion.div>
+    </div>
   );
 };
 

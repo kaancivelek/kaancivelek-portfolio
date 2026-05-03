@@ -5,7 +5,6 @@
  */
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Point } from "./types";
 import { calculateLineEnd } from "./utils";
 import { TIP_LINE_BASE_LENGTH, TIP_LINE_ACTIVE_LENGTH } from "./constants";
@@ -42,7 +41,7 @@ export const TipLine: React.FC<TipLineProps> = ({ tip, index, isActive, svgSize 
           <stop offset="100%" stopColor="#fff" stopOpacity={0} />
         </linearGradient>
       </defs>
-      <motion.line
+      <line
         x1={tip.x}
         y1={tip.y}
         x2={endPoint.x}
@@ -50,11 +49,6 @@ export const TipLine: React.FC<TipLineProps> = ({ tip, index, isActive, svgSize 
         stroke={`url(#${gradientId})`}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-        initial={{ opacity: 1 }}
-        animate={{
-          opacity: 1,
-        }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
         style={{
           filter: isActive 
             ? "drop-shadow(0 0 8px rgba(255, 255, 255, 0.4))" 

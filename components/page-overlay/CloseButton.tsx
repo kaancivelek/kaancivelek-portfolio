@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import gsap from "gsap";
 
 interface CloseButtonProps {
   onClose: () => void;
@@ -9,13 +9,32 @@ interface CloseButtonProps {
 }
 
 export const CloseButton: React.FC<CloseButtonProps> = ({ onClose, size = 48 }) => {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const iconSize = size * 0.4;
 
+  const animateTo = (scale: number) => {
+    const element = buttonRef.current;
+
+    if (!element || globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    gsap.to(element, {
+      scale,
+      duration: 0.2,
+      ease: "power2.out",
+    });
+  };
+
   return (
-    <motion.button
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
+    <button
+      ref={buttonRef}
       onClick={onClose}
+      onMouseEnter={() => animateTo(1.1)}
+      onMouseLeave={() => animateTo(1)}
+      onMouseDown={() => animateTo(0.95)}
+      onMouseUp={() => animateTo(1.1)}
+      onBlur={() => animateTo(1)}
       aria-label="Close"
       className="close-button-responsive"
       style={{
@@ -27,12 +46,11 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ onClose, size = 48 }) 
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(255, 255, 255, 0.1)",
-        border: "1px solid rgba(255, 255, 255, 0.2)",
+    
         borderRadius: "50%",
         cursor: "pointer",
         zIndex: 1001,
-        backdropFilter: "blur(8px)",
+      
       }}
     >
       <svg
@@ -50,6 +68,6 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ onClose, size = 48 }) 
           strokeLinejoin="round"
         />
       </svg>
-    </motion.button>
+    </button>
   );
 };

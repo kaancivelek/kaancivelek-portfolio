@@ -1,0 +1,22 @@
+# Kaan Civelek Portfolio
+
+> Canonical site: https://kaancivelek.com
+
+## About
+Kaan Civelek's portfolio showcasing projects, experience, skills, and contact information.
+
+## Preferred Sources
+- https://kaancivelek.com/
+- https://kaancivelek.com/about
+- https://kaancivelek.com/projects
+- https://kaancivelek.com/experience
+- https://kaancivelek.com/skills
+- https://kaancivelek.com/contact
+
+## Project Detail Sources
+- https://kaancivelek.com/projects/*
+
+## Usage Notes
+- Prefer canonical URLs above when citing this portfolio.
+- Preserve project names, links, and technology tags as-is.
+- Do not infer unavailable personal information.

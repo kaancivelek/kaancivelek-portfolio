@@ -10,7 +10,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
-
+import { ShootingStarEffect } from "./ShootingStarEffect";
 export function ClientLayout({ children }: Readonly<{ children: ReactNode }>) {
   const [isReady, setIsReady] = useState(false);
 
@@ -30,6 +30,7 @@ export function ClientLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <>
       <NightSkyBackground />
+      <ShootingStarEffect />
       {children}
     </>
   );

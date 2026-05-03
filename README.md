@@ -1,18 +1,18 @@
 # Kaan Civelek - Interactive Portfolio
 
-A unique portfolio website featuring an interactive star-shaped navigation system built with Next.js 16 and Framer Motion. This project showcases projects, experience, and skills through an innovative user interface that breaks away from traditional navigation patterns.
+A unique portfolio website featuring an interactive star-shaped navigation system built with Next.js 16 and GSAP. This project showcases projects, experience, and skills through an innovative user interface that breaks away from traditional navigation patterns.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.2-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19.2.3-61dafb?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat-square&logo=typescript)
-![Framer Motion](https://img.shields.io/badge/Framer%20Motion-12.26.2-ff0055?style=flat-square)
+![GSAP](https://img.shields.io/badge/GSAP-3.15.0-88CE02?style=flat-square)
 
 ## ✨ Features
 
 ### 🌟 Star Navigation System
 - **Interactive 5-Point Star**: Navigate through portfolio sections using a custom-built star-shaped interface
 - **Dynamic Active States**: Visual feedback with animated tip lines highlighting the current section
-- **Smooth Animations**: Powered by Framer Motion for fluid transitions and micro-interactions
+- **Smooth Animations**: Powered by GSAP for fluid transitions and micro-interactions
 - **Responsive Design**: Adapts seamlessly to different screen sizes with dynamic SVG scaling
 
 ### 📄 Modal Overlay Pages
@@ -158,7 +158,7 @@ kaancivelek-portfolio/
 - **[TypeScript 5.x](https://www.typescriptlang.org)** - Type safety
 
 ### Animation & Styling
-- **[Framer Motion 12.26.2](https://www.framer.com/motion/)** - Animation library
+- **[GSAP 3.15.0](https://gsap.com/)** - Animation library
 - **[Tailwind CSS 4](https://tailwindcss.com)** - Utility-first CSS framework
 - **[PostCSS](https://postcss.org)** - CSS processing
 
@@ -187,7 +187,7 @@ The star navigation system uses SVG path calculations to create a perfect 5-poin
 - **Error Handling**: Graceful fallbacks for failed data fetches
 
 ### Modal Overlay System
-- **Framer Motion AnimatePresence**: Coordinated entry/exit animations
+- **GSAP Timelines**: Coordinated entry/exit animations
 - **Backdrop Blur**: CSS `backdrop-filter` with 20px blur for visual depth
 - **Click-Outside-to-Close**: Overlay closes when clicking the backdrop
 - **ESC Key Support**: Keyboard accessibility with ESC key handler
@@ -224,6 +224,16 @@ Content is managed through JSON and Markdown files in the `/data` directory:
 **Update experience:**
 1. Edit `data/experience.json`
 2. Changes reflect immediately on next page load
+
+## 🤖 SEO & AI Discoverability
+
+- `app/robots.ts` provides crawl rules and sitemap declaration.
+- `app/sitemap.ts` generates route and project detail sitemap entries.
+- `public/llms.txt` provides canonical guidance for LLM crawlers.
+
+## 🗺️ Rendering Schema
+
+- Mermaid source: `docs/rendering-schema.mmd`
 
 ## 🎨 Customization
 

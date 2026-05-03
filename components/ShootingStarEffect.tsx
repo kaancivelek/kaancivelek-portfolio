@@ -1,111 +1,131 @@
 "use client";
 
-/**
- * ShootingStarEffect Component
- * Creates shooting star effects on click events.
- * Client component - requires event handlers and animations.
- */
+import { useEffect, useRef } from "react";
 
-import { useEffect, useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-
-interface Star {
-  id: number;
+interface Trail {
   x: number;
   y: number;
-  directionX: number;
-  directionY: number;
+  vx: number;
+  vy: number;
+  life: number;
+  maxLife: number;
 }
 
 export function ShootingStarEffect() {
-  const [stars, setStars] = useState<Star[]>([]);
-  const canClickRef = useRef(true);
-  const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const removeTimersRef = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
-
-  const handleClick = useCallback((e: MouseEvent) => {
-    if (!canClickRef.current) return;
-
-    // Random angle: between -45 and +45 degrees (downward direction)
-    const angle = (Math.random() * 90 - 45) * (Math.PI / 180);
-    const distance = 400;
-
-    const newStar: Star = {
-      id: Date.now(),
-      x: e.clientX,
-      y: e.clientY,
-      directionX: Math.sin(angle) * distance,
-      directionY: Math.cos(angle) * distance,
-    };
-
-    setStars((prev) => [...prev, newStar]);
-    canClickRef.current = false;
-
-    // 1 second cooldown
-    cooldownTimerRef.current = setTimeout(() => {
-      canClickRef.current = true;
-      cooldownTimerRef.current = null;
-    }, 1000);
-
-    // Remove star after 2 seconds
-    const removeTimer = setTimeout(() => {
-      setStars((prev) => prev.filter((star) => star.id !== newStar.id));
-      removeTimersRef.current.delete(newStar.id);
-    }, 2000);
-    removeTimersRef.current.set(newStar.id, removeTimer);
-  }, []);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const trailsRef = useRef<Trail[]>([]);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    document.addEventListener("click", handleClick);
-    
-    return () => {
-      document.removeEventListener("click", handleClick);
-      // Clear cooldown timer
-      if (cooldownTimerRef.current) {
-        clearTimeout(cooldownTimerRef.current);
-      }
-      // Clear all remove timers
-      removeTimersRef.current.forEach((timerId) => clearTimeout(timerId));
-      removeTimersRef.current.clear();
-    };
-  }, [handleClick]);
+    // 🎬 canvas oluştur
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+    canvasRef.current = canvas;
 
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 9999,
-      }}
-    >
-      <AnimatePresence>
-        {stars.map((star) => (
-          <motion.div
-            key={star.id}
-            initial={{ x: star.x, y: star.y, opacity: 1, scale: 1 }}
-            animate={{
-              x: star.x + star.directionX,
-              y: star.y + star.directionY,
-              opacity: 0,
-              scale: 0.5,
-            }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            style={{
-              position: "absolute",
-              width: "4px",
-              height: "4px",
-              background: "white",
-              borderRadius: "50%",
-              boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.8)",
-            }}
-          />
-        ))}
-      </AnimatePresence>
-    </div>
-  );
+    Object.assign(canvas.style, {
+      position: "fixed",
+      inset: "0",
+      pointerEvents: "none",
+      zIndex: "9999",
+    });
+
+    document.body.appendChild(canvas);
+
+    // 📐 resize
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    // ⭐ spawn logic (deterministic)
+    const spawn = () => {
+      const angle = (20 + Math.random() * 40) * (Math.PI / 180);
+      const speed = 10 + Math.random() * 6;
+
+      trailsRef.current.push({
+        x: Math.random() * canvas.width * 0.7,
+        y: Math.random() * canvas.height * 0.4,
+        vx: Math.sin(angle) * speed,
+        vy: Math.cos(angle) * speed,
+        life: 0,
+        maxLife: 30 + Math.random() * 20,
+      });
+    };
+
+    // ⏱ spawn scheduler (interval yerine)
+    let lastSpawn = 0;
+    let spawnDelay = 2000 + Math.random() * 3000;
+
+    const render = (time: number) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 👁 visibility-aware spawn
+      if (!document.hidden) {
+        if (time - lastSpawn > spawnDelay) {
+          spawn();
+          lastSpawn = time;
+          spawnDelay = 2000 + Math.random() * 4000;
+        }
+      } else {
+        // sekme gizliyken birikmeyi sıfırla
+        lastSpawn = time;
+      }
+
+      // ✨ trails render + cleanup (tek pass)
+      trailsRef.current = trailsRef.current.filter((t) => {
+        const progress = t.life / t.maxLife;
+        const alpha = 1 - progress;
+
+        const tailLength = 60;
+
+        const tx = t.x - t.vx * tailLength;
+        const ty = t.y - t.vy * tailLength;
+
+        const gradient = ctx.createLinearGradient(t.x, t.y, tx, ty);
+        gradient.addColorStop(0, `rgba(255,255,255,${alpha})`);
+        gradient.addColorStop(1, "rgba(255,255,255,0)");
+
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 0.8;     // 🎯 ince çizgi
+        ctx.lineCap = "round";   // 🎯 yumuşak uç
+
+        ctx.beginPath();
+        ctx.moveTo(t.x, t.y);
+        ctx.lineTo(tx, ty);
+        ctx.stroke();
+
+        // hareket
+        t.x += t.vx;
+        t.y += t.vy;
+        t.life++;
+
+        return t.life <= t.maxLife;
+      });
+
+      rafRef.current = requestAnimationFrame(render);
+    };
+
+    rafRef.current = requestAnimationFrame(render);
+
+    // 👁 sekme geri gelince burst önleme
+    const onVisibility = () => {
+      if (!document.hidden) {
+        lastSpawn = performance.now();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
+
+    // 🧹 cleanup
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibility);
+      canvas.remove();
+    };
+  }, []);
+
+  return null;
 }

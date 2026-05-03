@@ -9,9 +9,9 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, type ReactNode, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ANIMATION_DURATION, ANIMATION_VARIANTS } from "./constants";
+import { useCallback, useEffect, useRef, type ReactNode, Suspense } from "react";
+import gsap from "gsap";
+import { ANIMATION_DURATION } from "./constants";
 import { PageOverlayLayout } from "./PageOverlayLayout";
 
 interface PageOverlayWrapperProps {
@@ -22,10 +22,38 @@ interface PageOverlayWrapperProps {
 export function PageOverlayWrapper({ children, title }: Readonly<PageOverlayWrapperProps>) {
   const router = useRouter();
   const pathname = usePathname();
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const isClosingRef = useRef(false);
 
-  const handleClose = () => {
-    router.push("/");
-  };
+  const handleClose = useCallback(() => {
+    const element = overlayRef.current;
+
+    if (!element || isClosingRef.current) {
+      router.push("/");
+      return;
+    }
+
+    const prefersReducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      router.push("/");
+      return;
+    }
+
+    isClosingRef.current = true;
+
+    gsap.to(element, {
+      opacity: 0,
+      scale: 0.98,
+      y: 16,
+      duration: ANIMATION_DURATION,
+      ease: "power2.inOut",
+      onComplete: () => {
+        isClosingRef.current = false;
+        router.push("/");
+      },
+    });
+  }, [router]);
 
   // Close overlay on ESC key press
   useEffect(() => {
@@ -37,41 +65,56 @@ export function PageOverlayWrapper({ children, title }: Readonly<PageOverlayWrap
 
     globalThis.addEventListener("keydown", handleEsc);
     return () => globalThis.removeEventListener("keydown", handleEsc);
-  }, []);
+  }, [handleClose]);
+
+  useEffect(() => {
+    const element = overlayRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    const prefersReducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.killTweensOf(element);
+    isClosingRef.current = false;
+
+    gsap.fromTo(
+      element,
+      { opacity: 0, scale: 0.96, y: 18 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: prefersReducedMotion ? 0 : ANIMATION_DURATION,
+        ease: "power3.out",
+      }
+    );
+
+    return () => {
+      gsap.killTweensOf(element);
+    };
+  }, [pathname]);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial="hidden"
-        animate="visible"
-        exit="hidden"
-        variants={ANIMATION_VARIANTS.backdrop}
-        transition={{ duration: ANIMATION_DURATION }}
-        style={{ position: "fixed", inset: 0 }}
-      >
-        <PageOverlayLayout title={title} onClose={handleClose}>
-          <motion.div
-            variants={ANIMATION_VARIANTS.content}
-            transition={{
-              duration: ANIMATION_DURATION,
-              ease: [0.68, -0.55, 0.27, 1.55],
-            }}
-          >
-            <Suspense fallback={
-              <div style={{ 
-                color: "#666", 
-                textAlign: "center", 
-                padding: "2rem" 
-              }}>
-                Loading...
-              </div>
-            }>
-              {children}
-            </Suspense>
-          </motion.div>
-        </PageOverlayLayout>
-      </motion.div>
-    </AnimatePresence>
+    <div
+      ref={overlayRef}
+      key={pathname}
+      style={{ position: "fixed", inset: 0 }}
+    >
+      <PageOverlayLayout title={title} onClose={handleClose}>
+        <Suspense fallback={
+          <div style={{ 
+            color: "#666", 
+            textAlign: "center", 
+            padding: "2rem" 
+          }}>
+            Loading...
+          </div>
+        }>
+          {children}
+        </Suspense>
+      </PageOverlayLayout>
+    </div>
   );
 }
