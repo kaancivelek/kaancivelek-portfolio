@@ -15,7 +15,7 @@ export const INNER_RADIUS_RATIO = 0.167; // 16.7% of SVG size
 export const TIP_LINE_BASE_LENGTH = 16; // Default line length
 export const TIP_LINE_ACTIVE_LENGTH = 50; // Extended line length on hover
 
-export const ANIMATION_DURATION = 1500;
+export const ANIMATION_DURATION = 2200;
 export const SCALE_FACTOR = 5;
 
 export const NAVIGATION_ROUTES = [

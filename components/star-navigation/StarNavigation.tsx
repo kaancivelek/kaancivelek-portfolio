@@ -13,6 +13,7 @@ import { StarShape } from "./StarShape";
 import { TipLine } from "./TipLine";
 import { NavigationButton } from "./NavigationButton";
 import { generateStarPoints, generateTipPoints } from "./utils";
+import { getAudioManager } from "@/lib/audioManager";
 import { 
   NAVIGATION_ROUTES,
   BASE_SVG_SIZE,
@@ -32,11 +33,13 @@ import {
 
 
 export default function StarNavigation() {
+  
   const router = useRouter();
   const pathname = usePathname();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [svgSize, setSvgSize] = useState(BASE_SVG_SIZE * SIZE_MULTIPLIER);
+  const [isMuted, setIsMuted] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   
   // Only show interactive star on home page
@@ -87,6 +90,10 @@ export default function StarNavigation() {
 
     const prefersReducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    if (isHomePage && isAnimating) {
+      return;
+    }
+
     gsap.killTweensOf(element);
 
     if (isHomePage) {
@@ -121,6 +128,11 @@ export default function StarNavigation() {
   }, [isHomePage, isAnimating, pathname, svgSize]);
 
   useEffect(() => {
+    const audio = getAudioManager();
+    setIsMuted(audio.isMuted());
+  }, []);
+
+  useEffect(() => {
     const element = containerRef.current;
 
     if (!element || !isHomePage || isAnimating) {
@@ -135,13 +147,18 @@ export default function StarNavigation() {
   }, [activeIndex, isHomePage, isAnimating]);
 
   const handleNavigate = (index: number, path: string) => {
+    const audio = getAudioManager();
     const element = containerRef.current;
 
     if (!element) {
-      router.push(path);
+      audio.playClick();
+      setTimeout(() => {
+        router.push(path);
+      }, 120);
       return;
     }
 
+    audio.playClick();
     setActiveIndex(index);
     setIsAnimating(true);
 
@@ -155,7 +172,11 @@ export default function StarNavigation() {
       opacity: 0,
       duration: ANIMATION_DURATION / 1000,
       ease: "power2.inOut",
-      onComplete: () => router.push(path),
+      onComplete: () => {
+        setTimeout(() => {
+          router.push(path);
+        }, 120);
+      },
     });
   };
   
@@ -226,12 +247,46 @@ export default function StarNavigation() {
           label={route.label}
           isActive={activeIndex === idx}
           onClick={() => handleNavigate(idx, route.path)}
-          onMouseEnter={() => setActiveIndex(idx)}
-          onMouseLeave={() => setActiveIndex(null)}
+          onMouseEnter={() => {
+            setActiveIndex(idx);
+            const audio = getAudioManager();
+            audio.playHover();
+            audio.setAmbientTarget(0.2);
+          }}
+          onMouseLeave={() => {
+            setActiveIndex(null);
+            const audio = getAudioManager();
+            audio.setAmbientTarget(0.4);
+          }}
           svgSize={svgSize}
           tipIndex={idx}
         />
       ))}
+
+      <button
+        type="button"
+        onClick={() => {
+          const audio = getAudioManager();
+          setIsMuted(audio.toggleMuted());
+        }}
+        aria-label={isMuted ? "Unmute audio" : "Mute audio"}
+        style={{
+          position: "fixed",
+          top: 24,
+          right: 24,
+          zIndex: 110,
+          padding: "10px 14px",
+          background: "rgba(0, 0, 0, 0.45)",
+          color: "#fff",
+          fontSize: "0.6rem",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          cursor: "pointer",
+          backdropFilter: "blur(6px)",
+        }}
+      >
+        {isMuted ? "Sound: off" : "Sound: on"}
+      </button>
 
       {/* Center name - shown when no navigation is hovered */}
       {activeIndex === null && (
