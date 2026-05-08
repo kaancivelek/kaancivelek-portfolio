@@ -27,16 +27,17 @@ export function PageOverlayWrapper({ children, title }: Readonly<PageOverlayWrap
 
   const handleClose = useCallback(() => {
     const element = overlayRef.current;
+    const backPath = pathname.startsWith("/projects/") && pathname !== "/projects" ? "/projects" : "/";
 
     if (!element || isClosingRef.current) {
-      router.push("/");
+      router.push(backPath);
       return;
     }
 
     const prefersReducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (prefersReducedMotion) {
-      router.push("/");
+      router.push(backPath);
       return;
     }
 
@@ -50,10 +51,10 @@ export function PageOverlayWrapper({ children, title }: Readonly<PageOverlayWrap
       ease: "power2.inOut",
       onComplete: () => {
         isClosingRef.current = false;
-        router.push("/");
+        router.push(backPath);
       },
     });
-  }, [router]);
+  }, [router, pathname]);
 
   // Close overlay on ESC key press
   useEffect(() => {

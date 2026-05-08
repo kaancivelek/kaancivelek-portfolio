@@ -161,6 +161,11 @@ export default function StarNavigation() {
     audio.playClick();
     setActiveIndex(index);
     setIsAnimating(true);
+    
+    // Dispatch an event so OverlayUI can start sliding out immediately
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("navigation-start"));
+    }
 
     const tip = tipPoints[index];
     if (tip) {
@@ -224,7 +229,8 @@ export default function StarNavigation() {
         style={{ 
           position: "absolute", 
           top: 0,
-          left: 0
+          left: 0,
+          overflow: "visible"
         }}
       >
         <StarShape points={starPoints} svgSize={svgSize} />

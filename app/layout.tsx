@@ -8,6 +8,7 @@ import { Geist, Geist_Mono, Aldrich } from "next/font/google";
 import "./globals.css";
 import StarNavigation from "@/components/star-navigation/StarNavigation";
 import { ClientLayout } from "@/components/ClientLayout";
+import { OverlayUI } from "@/components/OverlayUI";
 import { baseMetadata } from "@/config";
 
 const geistSans = Geist({
@@ -37,11 +38,17 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${aldrich.variable} antialiased`}
-        style={{ minHeight: "100vh", background: "#000" }}
+        style={{
+          minHeight: "100vh", background: "#000", position: "relative"
+
+        }}
       >
         <ClientLayout>
           <StarNavigation />
+
           {children}
+
+          <OverlayUI />
         </ClientLayout>
       </body>
     </html>
