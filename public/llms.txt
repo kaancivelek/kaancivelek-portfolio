@@ -1,20 +1,20 @@
 # Kaan Civelek Portfolio
 
-> Canonical site: https://kaancivelek.com
+> Canonical site: https://kaancivelek-portfolio.vercel.app
 
 ## About
 Kaan Civelek's portfolio showcasing projects, experience, skills, and contact information.
 
 ## Preferred Sources
-- https://kaancivelek.com/
-- https://kaancivelek.com/about
-- https://kaancivelek.com/projects
-- https://kaancivelek.com/experience
-- https://kaancivelek.com/skills
-- https://kaancivelek.com/contact
+- https://kaancivelek-portfolio.vercel.app
+- https://kaancivelek-portfolio.vercel.app/about
+- https://kaancivelek-portfolio.vercel.app/projects
+- https://kaancivelek-portfolio.vercel.app/experience
+- https://kaancivelek-portfolio.vercel.app/skills
+- https://kaancivelek-portfolio.vercel.app/contact
 
 ## Project Detail Sources
-- https://kaancivelek.com/projects/*
+- https://kaancivelek-portfolio.vercel.app/projects/*
 
 ## Usage Notes
 - Prefer canonical URLs above when citing this portfolio.
