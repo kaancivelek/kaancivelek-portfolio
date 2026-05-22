@@ -1,47 +1,42 @@
-# Kaan Civelek - Interactive Portfolio
+# Kaan Civelek - Planetary Portfolio
 
-A unique portfolio website featuring an interactive star-shaped navigation system built with Next.js 16 and GSAP. This project showcases projects, experience, and skills through an innovative user interface that breaks away from traditional navigation patterns.
+An interactive portfolio that presents projects as planets in a Three.js solar system, with GSAP-driven animations and Howler-managed audio.
 
-![Next.js](https://img.shields.io/badge/Next.js-16.1.2-black?style=flat-square&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16.2.4-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19.2.3-61dafb?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat-square&logo=typescript)
-![GSAP](https://img.shields.io/badge/GSAP-3.15.0-88CE02?style=flat-square)
+![Three.js](https://img.shields.io/badge/Three.js-0.184.0-black?style=flat-square&logo=three.js)
+![GSAP](https://img.shields.io/badge/GSAP-3.13.0-88CE02?style=flat-square)
+![Howler](https://img.shields.io/badge/Howler-2.2.4-222?style=flat-square)
 
-## ✨ Features
+## Features
 
-### 🌟 Star Navigation System
-- **Interactive 5-Point Star**: Navigate through portfolio sections using a custom-built star-shaped interface
-- **Dynamic Active States**: Visual feedback with animated tip lines highlighting the current section
-- **Smooth Animations**: Powered by GSAP for fluid transitions and micro-interactions
-- **Responsive Design**: Adapts seamlessly to different screen sizes with dynamic SVG scaling
+### Planet System (Three.js)
+- Projects are modeled as planets in a starry space scene.
+- Planets orbit and navigate to project detail pages on click.
+- Lighting, materials, and glow layers create a cinematic look.
 
-### 📄 Modal Overlay Pages
-- **Page Overlays**: All content sections (About, Projects, Experience, Skills, Contact) open as elegant modal overlays
-- **Backdrop Blur**: High-quality blur effect (20px) with 85% opacity for focused content viewing
-- **Keyboard Navigation**: Full keyboard support with ESC key to close and accessible focus management
-- **Smooth Entry/Exit**: Coordinated animations using AnimatePresence for enter and exit transitions
+### Star Navigation
+- 5-point star interface for section navigation.
+- Active tip lines and hover feedback.
+- Smooth GSAP entry/exit animations.
 
-### 🎨 Modern UI/UX
-- **Dark Theme**: Minimalist design with `#111` background and carefully crafted color palette
-- **Accessible**: WCAG-compliant focus indicators and keyboard navigation
-- **Custom Typography**: Uses Aldrich, Geist Sans, and Geist Mono fonts for a unique aesthetic
-- **Loading States**: Elegant loading spinner during initial data fetch
+### Overlay Pages
+- About, Projects, Experience, Skills, Contact open as overlays.
+- Blur backdrop and ESC-to-close support.
+- GSAP transitions for entry/exit.
 
-### 🏗️ Architecture
-- **App Router**: Next.js 16 App Router with server and client components
-- **SSR-Safe**: Proper hydration handling with client-side calculations for window-dependent logic
-- **API Routes**: RESTful API endpoints for data fetching (`/api/data/*`)
-- **Context API**: Centralized data management with React Context
-- **Type Safety**: Full TypeScript coverage with strict type checking
-- **Modular Components**: Highly organized component structure with clear separation of concerns
+### Audio Experience (Howler)
+- Hover and click sounds.
+- Ambient loop and global mute control.
 
-## 🚀 Getting Started
+## Setup
 
 ### Prerequisites
 - Node.js 20.x or higher
 - npm, yarn, pnpm, or bun
 
-### Installation
+### Steps
 
 1. **Clone the repository**
 ```bash
@@ -52,246 +47,92 @@ cd kaancivelek-portfolio
 2. **Install dependencies**
 ```bash
 npm install
-# or
+# veya
 yarn install
-# or
+# veya
 pnpm install
 ```
 
-3. **Run the development server**
+3. **Start the dev server**
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-4. **Open your browser**
-Navigate to [http://localhost:3000](http://localhost:3000) to see the portfolio.
+4. **Open in your browser**
+[http://localhost:3000](http://localhost:3000)
 
-### Build for Production
-
+### Production
 ```bash
 npm run build
 npm start
 ```
 
-## 📁 Project Structure
+## Project Structure (Summary)
 
 ```
 kaancivelek-portfolio/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                  # Home page (empty - shows star nav only)
-│   ├── layout.tsx                # Root layout with fonts and StarNavigation
-│   ├── globals.css               # Global styles
-│   ├── about/
-│   │   └── page.tsx              # About page (server component)
-│   ├── projects/
-│   │   ├── page.tsx              # Projects list
-│   │   └── [slug]/
-│   │       └── page.tsx          # Individual project detail pages
-│   ├── experience/
-│   │   └── page.tsx              # Experience timeline
-│   ├── skills/
-│   │   └── page.tsx              # Skills showcase
-│   ├── contact/
-│   │   └── page.tsx              # Contact information
-│   └── api/
-│       └── data/                 # API routes for data fetching
-│           ├── about/route.ts
-│           ├── projects/route.ts
-│           ├── experience/route.ts
-│           └── contact/route.ts
-│
-├── components/
-│   ├── ClientLayout.tsx          # Client-side data loading and provider
-│   ├── LoadingSpinner.tsx        # Loading state component
-│   ├── ProjectCard.tsx           # Project card with hover states
-│   ├── ProjectLinkButton.tsx     # External project links
-│   ├── SkillCard.tsx             # Skill display component
-│   ├── SocialLinkCard.tsx        # Social media links
-│   │
+├── app/                          # Next.js App Router pages
+├── components/                   # UI and interactive components
+│   ├── OrbitalSystem.tsx         # Three.js planet scene
 │   ├── star-navigation/          # Star navigation system
-│   │   ├── StarNavigation.tsx    # Main navigation component
-│   │   ├── StarShape.tsx         # SVG star polygon
-│   │   ├── TipLine.tsx           # Active state indicator lines
-│   │   ├── NavigationButton.tsx  # Individual nav buttons
-│   │   ├── constants.ts          # Configuration constants
-│   │   ├── utils.ts              # Star point calculations
-│   │   ├── types.ts              # TypeScript types
-│   │   └── README.md             # Navigation system docs
-│   │
-│   └── page-overlay/             # Modal overlay system
-│       ├── PageOverlay.tsx       # Animated overlay (legacy)
-│       ├── PageOverlayWrapper.tsx # Client wrapper with routing
-│       ├── PageOverlayLayout.tsx  # Layout component
-│       ├── CloseButton.tsx       # Close button component
-│       ├── constants.ts          # Overlay configuration
-│       ├── types.ts              # TypeScript types
-│       └── index.ts              # Barrel exports
-│
-├── contexts/
-│   └── DataContext.tsx           # Global data context provider
-│
-├── data/                         # Content management
-│   ├── about.json                # Personal information
-│   ├── about-bio.md              # Biography markdown
-│   ├── projects.json             # Projects metadata
-│   ├── experience.json           # Work experience
-│   ├── contact.json              # Contact information
-│   ├── contact-cta.md            # Contact CTA markdown
-│   └── projects/                 # Detailed project descriptions
-│       └── portfolio-2026.md
-│
-├── lib/
-│   └── content.ts                # Markdown processing utilities
-│
-└── public/                       # Static assets
+│   └── page-overlay/             # Overlay page system
+├── data/                         # JSON + Markdown content
+├── lib/                          # Helpers (content, audio)
+├── public/                       # Static assets (audio)
+└── docs/                         # Diyagramlar
 ```
 
-## 🛠️ Technology Stack
+## Tech Stack
 
 ### Core
-- **[Next.js 16.1.2](https://nextjs.org)** - React framework with App Router
-- **[React 19.2.3](https://react.dev)** - UI library
-- **[TypeScript 5.x](https://www.typescriptlang.org)** - Type safety
+- **Next.js 16.2.4** - App Router
+- **React 19.2.3** - UI
+- **TypeScript 5.x** - Type safety
 
-### Animation & Styling
-- **[GSAP 3.15.0](https://gsap.com/)** - Animation library
-- **[Tailwind CSS 4](https://tailwindcss.com)** - Utility-first CSS framework
-- **[PostCSS](https://postcss.org)** - CSS processing
+### 3D + Animation
+- **Three.js 0.184.0** - 3D scene
+- **GSAP 3.13.0** - Animations
 
-### Content Processing
-- **[gray-matter 4.0.3](https://github.com/jonschlinkert/gray-matter)** - YAML frontmatter parser
-- **[marked 17.0.1](https://marked.js.org)** - Markdown parser and compiler
+### Audio
+- **Howler 2.2.4** - Audio management
 
-### Development
-- **[ESLint 9](https://eslint.org)** - Code linting
-- **[eslint-config-next](https://nextjs.org/docs/app/building-your-application/configuring/eslint)** - Next.js ESLint configuration
+### Content
+- **gray-matter 4.0.3** - Frontmatter parser
+- **marked 17.0.1** - Markdown parser
 
-## 🎯 Key Technical Implementations
+## Content Management
 
-### Star Navigation
-The star navigation system uses SVG path calculations to create a perfect 5-point star with interactive buttons at each tip:
-
-- **Dynamic Positioning**: Buttons are positioned using trigonometric calculations based on star tip coordinates
-- **Active State Visualization**: Animated lines connect the star center to active navigation points
-- **Responsive Sizing**: SVG scales proportionally across different viewport sizes
-- **Static Background Star**: When navigating away from home, a static star appears behind overlays
-
-### Server-Side Rendering
-- **API Routes**: Data is fetched server-side via Next.js API routes that read JSON and Markdown files
-- **Client-Side Hydration**: Data is loaded client-side in `ClientLayout` and provided via Context
-- **Loading States**: Minimum 1-second loading animation for smooth UX
-- **Error Handling**: Graceful fallbacks for failed data fetches
-
-### Modal Overlay System
-- **GSAP Timelines**: Coordinated entry/exit animations
-- **Backdrop Blur**: CSS `backdrop-filter` with 20px blur for visual depth
-- **Click-Outside-to-Close**: Overlay closes when clicking the backdrop
-- **ESC Key Support**: Keyboard accessibility with ESC key handler
-- **Route Integration**: Uses Next.js router to navigate back to home on close
-
-### Accessibility
-- **Keyboard Navigation**: Full support for Tab, Enter, and ESC keys
-- **Focus Management**: Visible focus indicators with high-contrast colors
-- **ARIA Labels**: Proper labeling for screen readers
-- **Semantic HTML**: Correct heading hierarchy and landmark regions
-
-## 📝 Data Management
-
-Content is managed through JSON and Markdown files in the `/data` directory:
-
-### JSON Files
-- `about.json` - Personal information, skills, and social links
-- `projects.json` - Project metadata, tags, and links
-- `experience.json` - Work history and achievements
-- `contact.json` - Contact information and CTA
-
-### Markdown Files
-- `about-bio.md` - Long-form biography
-- `contact-cta.md` - Contact call-to-action message
-- `projects/*.md` - Detailed project descriptions with full markdown support
-
-### Adding New Content
+- Project list: `data/projects.json`
+- Project details: `data/projects/[slug].md`
+- About: `data/about.json` + `data/about-bio.md`
+- Experience: `data/experience.json`
+- Contact: `data/contact.json` + `data/contact-cta.md`
 
 **Add a new project:**
-1. Add entry to `data/projects.json`
-2. Create markdown file in `data/projects/[slug].md`
-3. Project will automatically appear in the Projects section
+1. Add a new entry to `data/projects.json`.
+2. Create `data/projects/[slug].md`.
 
-**Update experience:**
-1. Edit `data/experience.json`
-2. Changes reflect immediately on next page load
+## Customization Tips
 
-## 🤖 SEO & AI Discoverability
+- Navigation routes: `components/star-navigation/constants.ts`
+- Overlay animations: `components/page-overlay/constants.ts`
+- Planet scene settings: `components/OrbitalSystem.tsx`
+- Audio files: `public/audio/`
 
-- `app/robots.ts` provides crawl rules and sitemap declaration.
-- `app/sitemap.ts` generates route and project detail sitemap entries.
-- `public/llms.txt` provides canonical guidance for LLM crawlers.
+## SEO and LLM Friendly
 
-## 🗺️ Rendering Schema
+- `app/robots.ts` and `app/sitemap.ts` generate the sitemap
+- `public/llms.txt` provides LLM crawler guidance
 
-- Mermaid source: `docs/rendering-schema.mmd`
+## License
 
-## 🎨 Customization
+This project can be used under the following condition:
 
-### Colors
-Edit color values in component styles and `app/globals.css`
+- Include a footer credit with "Kaan Civelek" and a link to the original repository.
 
-### Navigation Routes
-Modify `components/star-navigation/constants.ts`:
-```typescript
-export const NAVIGATION_ROUTES = [
-  { label: "About", path: "/about" },
-  { label: "Projects", path: "/projects" },
-  // Add more routes...
-];
-```
+See [LICENSE](LICENSE) for details.
 
-### Animation Timings
-Adjust in respective `constants.ts` files:
-- `components/star-navigation/constants.ts` - Navigation animations
-- `components/page-overlay/constants.ts` - Overlay animations
-
-### Blur Effect
-In `components/page-overlay/constants.ts`:
-```typescript
-export const OVERLAY_STYLES = {
-  backdropBlur: 20,        // Blur intensity (px)
-  backdropOpacity: 0.85,   // Background darkness (0-1)
-  // ...
-};
-```
-
-## 🐛 Known Issues & Solutions
-
-### Hydration Errors
-**Issue**: Using `window` object during SSR causes hydration mismatch
-
-**Solution**: All window-dependent calculations moved to `useEffect` hooks
-
-### Animation Timing
-**Issue**: Content renders before animation completes
-
-**Solution**: Used `AnimatePresence` with `mode="wait"` and synchronized `key` props
-
-### Focus Management
-**Issue**: Duplicate tab stops on project cards
-
-**Solution**: Removed `tabIndex` from inner divs, focus handlers moved to Link components
-
-## 📄 License
-
-This project is available for use under the following terms:
-
-**You are free to use this code with ONE condition:**
-- You must include a footer credit that mentions "Kaan Civelek" with a link to the original repository
-
-See [LICENSE](LICENSE) file for full terms.
-
-## 👤 Author
+## Author
 
 **Kaan Civelek**
 
@@ -299,13 +140,3 @@ See [LICENSE](LICENSE) file for full terms.
 - LinkedIn: [kaancivelek](https://linkedin.com/in/kaancivelek)
 - Twitter: [@kaancivelek](https://twitter.com/kaancivelek)
 - Email: businesskaancivelek@gmail.com
-
-## 🙏 Acknowledgments
-
-- [Next.js Documentation](https://nextjs.org/docs) - Excellent framework documentation
-- [Framer Motion](https://www.framer.com/motion/) - Powerful animation library
-- [Vercel](https://vercel.com) - Hosting and deployment platform
-
----
-
-**⭐ If you found this project interesting or useful, please consider giving it a star!**
