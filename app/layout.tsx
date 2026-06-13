@@ -4,6 +4,7 @@
  */
 
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
 import { Geist, Geist_Mono, Aldrich } from "next/font/google";
 import "./globals.css";
 import StarNavigation from "@/components/star-navigation/StarNavigation";
@@ -50,6 +51,7 @@ export default function RootLayout({
 
           <OverlayUI />
         </ClientLayout>
+        <Analytics />
       </body>
     </html>
   );

@@ -63,13 +63,13 @@ export const baseMetadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: "ZUEC6Z6KpqW29v9GdIjAmca6KHvcP5IdmcYE6yIKvaQ",
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
-  },
-  verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
   },
 };
 
