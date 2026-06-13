@@ -11,7 +11,7 @@ export const siteConfig = {
     "Portfolio of Kaan Civelek – a software engineering student specializing in React, Next.js, TypeScript, and full-stack development.",
 
   // URLs
-  url: "https://kaancivelek.com",
+  url: "https://kaancivelek-portfolio.vercel.app",
   ogImage: "/og-image.jpg",
 
   // Location & Contact
