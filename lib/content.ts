@@ -2,76 +2,34 @@
  * Content Library
  * Server-side data fetching utilities for SSR.
  * All functions run on the server and can be called directly from page components.
- * Uses React cache for request deduplication and unstable_cache for build-time caching.
+ * Uses Prisma to fetch data from SQLite instead of the file system.
+ * Markdown rendering via `marked` is preserved.
  */
 
-import fs from "node:fs/promises";
-import path from "node:path";
-import matter from "gray-matter";
 import { marked } from "marked";
 import { cache } from "react";
-import { unstable_cache } from "next/cache";
+import { prisma } from "@/lib/prisma";
 import type {
-  About,
   AboutWithContent,
   Skills,
   Project,
   ProjectWithContent,
   Experience,
-  Contact,
   ContactWithContent,
+  SocialLink,
 } from "@/types";
-
-const dataDirectory = path.join(process.cwd(), "data");
 
 // =============================================================================
 // Core Utilities
 // =============================================================================
 
 /**
- * Reads and parses a JSON file from the data directory.
- * Cached at build time for static generation.
- * @param filename - Name of the JSON file (e.g., "about.json")
+ * Converts markdown string to HTML.
  */
-async function readJsonFile<T>(filename: string): Promise<T> {
-  const filePath = path.join(dataDirectory, filename);
-  const fileContents = await fs.readFile(filePath, "utf8");
-  return JSON.parse(fileContents);
+async function renderMarkdown(md: string): Promise<string> {
+  if (!md) return "";
+  return marked.parse(md);
 }
-
-export const getJsonData = cache(async function <T>(filename: string): Promise<T> {
-  return unstable_cache(
-    async () => readJsonFile<T>(filename),
-    [`json-${filename}`],
-    { revalidate: process.env.NODE_ENV === "development" ? 5 : 3600 }
-  )();
-});
-
-/**
- * Converts a markdown file to HTML.
- * Cached at build time for static generation.
- * @param filename - Path to markdown file relative to data directory
- */
-async function readMarkdownFile(filename: string) {
-  const filePath = path.join(dataDirectory, filename);
-  const fileContents = await fs.readFile(filePath, "utf8");
-  const { data, content } = matter(fileContents);
-
-  const htmlContent = await marked.parse(content);
-
-  return {
-    frontmatter: data,
-    content: htmlContent,
-  };
-}
-
-export const getMarkdownContent = cache(async function (filename: string) {
-  return unstable_cache(
-    async () => readMarkdownFile(filename),
-    [`markdown-${filename}`],
-    { revalidate: false }
-  )();
-});
 
 // =============================================================================
 // About Data
@@ -79,20 +37,32 @@ export const getMarkdownContent = cache(async function (filename: string) {
 
 /**
  * Fetches about/profile data with resolved bio HTML.
- * Cached for request deduplication.
- * Use in about page for SSR.
  */
 export const getAboutData = cache(async function (): Promise<AboutWithContent> {
-  const about = await getJsonData<About>("about.json");
+  const row = await prisma.about.findFirst();
 
-  let bioHtml = "";
-  if (about.bio) {
-    const { content } = await getMarkdownContent(about.bio);
-    bioHtml = content;
+  if (!row) {
+    return {
+      name: "",
+      title: "",
+      location: "",
+      email: "",
+      social: {},
+      skills: {},
+      bioHtml: "",
+    };
   }
 
+  const bioHtml = await renderMarkdown(row.bio);
+
   return {
-    ...about,
+    name: row.name,
+    title: row.title,
+    bio: row.bio || undefined,
+    location: row.location,
+    email: row.email,
+    social: JSON.parse(row.social),
+    skills: JSON.parse(row.skills),
     bioHtml,
   };
 });
@@ -102,54 +72,63 @@ export const getAboutData = cache(async function (): Promise<AboutWithContent> {
 // =============================================================================
 
 /**
- * Fetches all projects from JSON.
- * Cached for request deduplication.
- * Use in projects list page for SSR.
+ * Fetches all projects from SQLite.
  */
 export async function getProjects(): Promise<Project[]> {
-  const data = await getJsonData<{ projects: Project[] }>("projects.json");
-  return data.projects;
+  const rows = await prisma.project.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
+
+  return rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    slug: row.slug,
+    description: row.description,
+    detailedDescription: row.detailedDescription || undefined,
+    image: row.image || undefined,
+    tags: JSON.parse(row.tags),
+    featured: row.featured,
+    year: row.year,
+    status: row.status as Project["status"],
+    links: row.links ? JSON.parse(row.links) : undefined,
+  }));
 }
 
 /**
- * Fetches a single project by slug with resolved content.
- * Cached for request deduplication.
- * Use in project detail page for SSR.
- * @param slug - Project slug
- * @returns Project with content or null if not found
+ * Fetches a single project by slug with resolved markdown content.
  */
 export const getProjectBySlug = cache(async function (
   slug: string
 ): Promise<ProjectWithContent | null> {
-  const projects = await getProjects();
-  const project = projects.find((p) => p.slug === slug);
+  const row = await prisma.project.findUnique({ where: { slug } });
 
-  if (!project) {
-    return null;
-  }
+  if (!row) return null;
 
-  let contentHtml = "";
-  if (project.detailedDescription) {
-    try {
-      const { content } = await getMarkdownContent(project.detailedDescription);
-      contentHtml = content;
-    } catch {
-      // Markdown file may not exist, continue without content
-    }
-  }
+  const contentHtml = await renderMarkdown(row.detailedDescription);
 
   return {
-    ...project,
+    id: row.id,
+    title: row.title,
+    slug: row.slug,
+    description: row.description,
+    detailedDescription: row.detailedDescription || undefined,
+    image: row.image || undefined,
+    tags: JSON.parse(row.tags),
+    featured: row.featured,
+    year: row.year,
+    status: row.status as Project["status"],
+    links: row.links ? JSON.parse(row.links) : undefined,
     contentHtml,
   };
 });
 
 /**
  * Gets all project slugs for static generation.
- * Use with generateStaticParams.
  */
 export const getAllProjectSlugs = cache(async function (): Promise<string[]> {
-  const projects = await getProjects();
+  const projects = await prisma.project.findMany({
+    select: { slug: true },
+  });
   return projects.map((p) => p.slug);
 });
 
@@ -158,15 +137,26 @@ export const getAllProjectSlugs = cache(async function (): Promise<string[]> {
 // =============================================================================
 
 /**
- * Fetches all experiences from JSON.
- * Cached for request deduplication.
- * Use in experience page for SSR.
+ * Fetches all experiences from SQLite.
  */
 export const getExperiences = cache(async function (): Promise<Experience[]> {
-  const data = await getJsonData<{ experiences: Experience[] }>(
-    "experience.json"
-  );
-  return data.experiences;
+  const rows = await prisma.experience.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
+
+  return rows.map((row) => ({
+    id: row.id,
+    company: row.company,
+    position: row.position,
+    location: row.location,
+    type: row.type as Experience["type"],
+    startDate: row.startDate,
+    endDate: row.endDate || undefined,
+    current: row.current,
+    description: row.description || undefined,
+    achievements: JSON.parse(row.achievements),
+    technologies: JSON.parse(row.technologies),
+  }));
 });
 
 // =============================================================================
@@ -175,21 +165,37 @@ export const getExperiences = cache(async function (): Promise<Experience[]> {
 
 /**
  * Fetches contact data with resolved CTA HTML.
- * Cached for request deduplication.
- * Use in contact page for SSR.
  */
 export const getContactData = cache(
   async function (): Promise<ContactWithContent> {
-    const data = await getJsonData<Contact>("contact.json");
+    const row = await prisma.contact.findFirst();
 
-    let ctaHtml = "";
-    if (data.callToAction) {
-      const { content } = await getMarkdownContent(data.callToAction);
-      ctaHtml = content;
+    if (!row) {
+      return {
+        contact: {
+          email: "",
+          availability: "",
+          timezone: "",
+          preferredContact: "",
+          responseTime: "",
+        },
+        socialLinks: [],
+        ctaHtml: "",
+      };
     }
 
+    const ctaHtml = await renderMarkdown(row.callToAction);
+    const socialLinks: SocialLink[] = JSON.parse(row.socialLinks);
+
     return {
-      ...data,
+      contact: {
+        email: row.email,
+        availability: row.availability,
+        timezone: row.timezone,
+        preferredContact: row.preferredContact,
+        responseTime: row.responseTime,
+      },
+      socialLinks,
       ctaHtml,
     };
   }
@@ -201,10 +207,38 @@ export const getContactData = cache(
 
 /**
  * Fetches skills from about data.
- * Cached for request deduplication.
- * Use in skills page for SSR.
  */
 export const getSkills = cache(async function (): Promise<Skills> {
-  const about = await getJsonData<About>("about.json");
-  return about.skills;
+  const row = await prisma.about.findFirst();
+  if (!row) return {};
+  return JSON.parse(row.skills);
+});
+
+// =============================================================================
+// Legacy exports for backward compatibility
+// =============================================================================
+export const getJsonData = cache(async function <T>(filename: string): Promise<T> {
+  // This function is kept for backward compatibility but now routes through Prisma
+  if (filename === "about.json") {
+    const about = await getAboutData();
+    return about as unknown as T;
+  }
+  if (filename === "projects.json") {
+    const projects = await getProjects();
+    return { projects } as unknown as T;
+  }
+  if (filename === "experience.json") {
+    const experiences = await getExperiences();
+    return { experiences } as unknown as T;
+  }
+  if (filename === "contact.json") {
+    const contact = await getContactData();
+    return contact as unknown as T;
+  }
+  throw new Error(`Unknown data file: ${filename}`);
+});
+
+export const getMarkdownContent = cache(async function (content: string) {
+  const htmlContent = await renderMarkdown(content);
+  return { frontmatter: {}, content: htmlContent };
 });

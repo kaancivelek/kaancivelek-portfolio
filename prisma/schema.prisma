@@ -1,0 +1,95 @@
+// Prisma Schema for Portfolio SQLite Database
+// Mirrors the existing JSON/MD data structure.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// Authentication
+// =============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =============================================================================
+// About / Profile
+// =============================================================================
+
+model About {
+  id       String @id @default(cuid())
+  name     String
+  title    String
+  bio      String @default("") // Markdown content stored directly
+  location String
+  email    String
+  // Social links stored as JSON string
+  social   String @default("{}")
+  // Skills stored as JSON string: { "Frontend": ["React", ...], ... }
+  skills   String @default("{}")
+}
+
+// =============================================================================
+// Projects
+// =============================================================================
+
+model Project {
+  id                  String  @id @default(cuid())
+  slug                String  @unique
+  title               String
+  description         String
+  detailedDescription String  @default("") // Markdown content stored directly
+  image               String?
+  tags                String  @default("[]") // JSON array of strings
+  featured            Boolean @default(false)
+  year                Int
+  status              String  @default("completed") // active | completed | archived | wip
+  links               String? // JSON: { live?: string, github?: string, demo?: string }
+  sortOrder           Int     @default(0)
+}
+
+// =============================================================================
+// Experience
+// =============================================================================
+
+model Experience {
+  id           String  @id @default(cuid())
+  company      String
+  position     String
+  location     String
+  type         String  @default("Full-time") // Full-time | Part-time | Internship | Freelance | Contract
+  startDate    String
+  endDate      String?
+  current      Boolean @default(false)
+  description  String  @default("") // Markdown content stored directly
+  achievements String  @default("[]") // JSON array of strings
+  technologies String  @default("[]") // JSON array of strings
+  sortOrder    Int     @default(0)
+}
+
+// =============================================================================
+// Contact
+// =============================================================================
+
+model Contact {
+  id               String @id @default(cuid())
+  email            String
+  availability     String
+  timezone         String
+  preferredContact String
+  responseTime     String
+  callToAction     String @default("") // Markdown content stored directly
+  // Social links as JSON array: [{ platform, url, username }]
+  socialLinks      String @default("[]")
+}

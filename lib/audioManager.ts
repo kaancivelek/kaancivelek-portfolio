@@ -5,8 +5,8 @@ class AudioManager {
   hover: Howl;
   click: Howl;
 
-  ambientVolume = 0.1;
-  targetAmbientVolume = 0.4;
+  ambientVolume = 0.05;
+  targetAmbientVolume = 0.2;
   muted = false;
 
   constructor() {
@@ -18,12 +18,12 @@ class AudioManager {
 
     this.hover = new Howl({
       src: ["/audio/hover.wav"],
-      volume: 0.6,
+      volume: 0.3,
     });
 
     this.click = new Howl({
       src: ["/audio/click.wav"],
-      volume: 0.8,
+      volume: 0.4,
     });
   }
 
@@ -64,7 +64,6 @@ class AudioManager {
   update() {
     this.ambientVolume += (this.targetAmbientVolume - this.ambientVolume) * 0.08;
     this.ambient.volume(this.ambientVolume);
-    console.log("update running", this.ambientVolume);
   }
 }
 

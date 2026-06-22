@@ -39,7 +39,10 @@ export default function StarNavigation() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [svgSize, setSvgSize] = useState(BASE_SVG_SIZE * SIZE_MULTIPLIER);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return getAudioManager().isMuted();
+  });
   const containerRef = useRef<HTMLDivElement | null>(null);
   
   // Only show interactive star on home page
@@ -127,10 +130,7 @@ export default function StarNavigation() {
     );
   }, [isHomePage, isAnimating, pathname, svgSize]);
 
-  useEffect(() => {
-    const audio = getAudioManager();
-    setIsMuted(audio.isMuted());
-  }, []);
+
 
   useEffect(() => {
     const element = containerRef.current;
