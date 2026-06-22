@@ -13,14 +13,14 @@ export default async function AdminContactPage() {
 
   const initialData = contact
     ? {
-        email: contact.email,
-        availability: contact.availability,
-        timezone: contact.timezone,
-        preferredContact: contact.preferredContact,
-        responseTime: contact.responseTime,
-        callToAction: contact.callToAction,
-        socialLinks: contact.socialLinks,
-      }
+      email: contact.email,
+      availability: contact.availability,
+      timezone: contact.timezone,
+      preferredContact: contact.preferredContact,
+      responseTime: contact.responseTime,
+      callToAction: contact.callToAction,
+      socialLinks: contact.socialLinks,
+    }
     : undefined;
 
   return (
